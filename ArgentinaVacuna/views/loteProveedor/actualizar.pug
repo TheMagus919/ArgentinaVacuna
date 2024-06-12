@@ -1,0 +1,46 @@
+extends ../layout.pug
+
+block content
+    .contenedorVolverCrear
+        a.link(href="../")
+            | Volver Atrás
+            img(src='/images/volver.png', alt="Flecha hacia atrás")
+    .formulario
+        h1.text-center EDITAR LOTE PROVEEDOR NRO: #{lote.nroLote}
+        .container
+            form.form(action="?_method=PUT" method="post")
+                .row.justify-content-between
+                    .col-md-5
+                        .form-group
+                            label(for="idLab") LABORATORIO:
+                            select.form-control(name="idLab" id="idLab" required)
+                                each lab in labs
+                                    option(value=`${lab.idLab}` selected=`${lab.idLab}`===`${lote.Laboratorio.idLab}`) #{lab.nombre}
+                        .form-group
+                            label(for="idTipoVacuna") TIPO DE VACUNA:
+                            select.form-control(name="idTipoVacuna" id="idTipoVacuna" required)
+                                each tip in tipos
+                                    option(value=`${tip.idTipoVacuna}` selected=`${tip.idTipoVacuna}`===`${lote.TipoVacuna.idTipoVacuna}`) #{tip.nombre}
+                        .form-group
+                            label(for="tipoDeFrasco") TIPO DE FRASCO:
+                            select.form-control(name="tipoDeFrasco" id="tipoDeFrasco" required)
+                                option(value="Monodosis" selected="Monodosis"===`${lote.tipoDeFrasco}`) Monodosis
+                                option(value="Multidosis" selected="Multidosis"===`${lote.tipoDeFrasco}`) Multidosis
+                        .form-group
+                            label(for="nombreComercial") NOMBRE COMERCIAL:
+                            input.form-control(type="text" name="nombreComercial" id="nombreComercial" value=`${lote.nombreComercial}` required)
+                    .col-md-5
+                        .form-group
+                            label(for="cantidadDeVacunas") CANTIDAD DE VACUNAS:
+                            input.form-control(type="number" name="cantidadDeVacunas" id="cantidadDeVacunas" value=`${lote.cantidadDeVacunas}` required)
+                        .form-group
+                            label(for="fechaDeFabricacion") FECHA DE FABRICACION:
+                            input.form-control(type="date" name="fechaDeFabricacion" id="fechaDeFabricacion" value=`${lote.fechaDeFabricacion}` required)
+                        .form-group
+                            label(for="fechaDeVencimiento") FECHA DE VENCIMIENTO:
+                            input.form-control(type="date" name="fechaDeVencimiento" id="fechaDeVencimiento" value=`${lote.fechaDeVencimiento}` required)
+                        .form-group
+                            label(for="fechaDeCompra") FECHA DE COMPRA:
+                            input.form-control(type="date" name="fechaDeCompra" id="fechaDeCompra" value=`${lote.fechaDeCompra}` required)
+                        .form-group
+                            input.form-control.btn.btn-light(type="submit", value="Guardar")

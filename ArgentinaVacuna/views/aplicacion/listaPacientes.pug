@@ -1,0 +1,22 @@
+extends ../layout.pug
+
+block content
+    .contenedorVolverCrear
+        a.link(href="./")
+            | Volver Atrás
+            img(src='/images/volver.png', alt="Flecha hacia atrás")
+    h4 Listar pacientes vacunados por Tipo de Vacuna, Localidad y Provincia:
+    table.table#tabla
+        thead
+            tr
+                th CANTIDAD DE PACIENTES
+                th TIPO DE VACUNA
+                th LOCALIDAD 
+                th PROVINCIA
+        tbody
+            each lis in listaPacientes
+                tr
+                    td= lis.dataValues.cantidadPacientes
+                    td= lis.dataValues.tipoVacuna
+                    td= lis.CentroDeVacunacion.localidad 
+                    td= lis.CentroDeVacunacion.provincia

@@ -1,0 +1,36 @@
+extends ../layout.pug
+
+block content
+    .contenedorVolverCrear
+        a.link(href="../")
+            | Volver Atrás
+            img(src='/images/volver.png', alt="Flecha hacia atrás")
+    .formulario
+        h1.text-center EDITAR REGISTRO DE TRASLADO ID: #{tras.idTraslado}
+        .container
+            form.form(action="?_method=PUT" method="post")
+                .row.justify-content-between
+                    .col-md-7
+                        .form-group
+                            label(for="idCentroEnvia") CENTRO DE VACUNACION QUE ENVIA:
+                            input.form-control(type="text" name="idCentroEnvia" id="idCentroEnvia" value=`${tras.idCentroEnvia} - ${tras.centroEnvia.nombre}` readonly)
+                        .form-group
+                            label(for="nroLote") LOTE PROVEEDOR:
+                            input.form-control(type="text" name="nroLote" id="nroLote" value=`${tras.nroLote} - ${tras.LoteProveedor.nombreComercial}` readonly)
+                        .form-group
+                            label(for="idCentroRecibe") CENTRO DE VACUNACION QUE RECIBE:
+                            select.form-control(name="idCentroRecibe" id="idCentroRecibe" required)
+                                each centro in centros
+                                    option(value=`${centro.idCentro}` selected=`${centro.idCentro}`===`${tras.idCentroRecibe}`) #{centro.idCentro} - #{centro.nombre}
+                    .col-md-5
+                        .form-group
+                            label(for="cantidadDeVacunas") CANTIDAD DE VACUNAS:
+                            input.form-control(type="number" name="cantidadDeVacunas" id="cantidadDeVacunas" min="1" max=`${cantidad.cantidadDeVacunas}` value=`${tras.cantidadDeVacunas}` required)
+                        .form-group
+                            label(for="fechaSalida") FECHA SALIDA:
+                            input.form-control(type="date" name="fechaSalida" id="fechaSalida" value=`${tras.fechaSalida}` required)
+                        .form-group
+                            label(for="echaLlegada") FECHA LLEGADA:
+                            input.form-control(type="date" name="echaLlegada" id="echaLlegada"  value=`${tras.fechaLlegada}` required)
+                        .form-group
+                            input.form-control.btn.btn-light(type="submit", value="Guardar")

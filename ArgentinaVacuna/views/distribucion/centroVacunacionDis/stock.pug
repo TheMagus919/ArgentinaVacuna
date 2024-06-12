@@ -1,0 +1,23 @@
+extends ../../layout.pug
+
+block content
+    .contenedorVolverCrear
+        a.link(href="./")
+            | Volver Atrás
+            img(src='/images/volver.png', alt="Flecha hacia atrás")
+        h5
+            form(action=`/distribucion/distribucionCentroVac/depositos`, method="get")
+                input(type="submit", value="Añadir Registro Distribucion Centro de Vacunacion")
+    table.table#tabla
+        thead
+            tr
+                th STOCK DISPONIBLE
+                th TIPO DE VACUNA
+                th PROVINCIA
+        tbody
+            each stock in listaStock
+                tr
+                    td= stock.dataValues.stockDisponible
+                    td= stock.dataValues.tipoVacuna
+                    td= stock.dataValues.provincia
+                            

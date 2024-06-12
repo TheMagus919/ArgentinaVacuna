@@ -1,0 +1,39 @@
+extends ../layout.pug
+
+block content
+    .contenedorVolverCrear
+        a.link(href="./")
+            | Volver Atrás
+            img(src='/images/volver.png', alt="Flecha hacia atrás")
+    .formulario
+        h1.text-center AÑADIR NUEVO AGENTE DE SALUD
+        .container
+            form.form(action="alta" method="post")
+                .row.justify-content-between
+                    .col-md-5
+                        .form-group
+                            label(for="dniAgente") DNI:
+                            input.form-control(type="number" name="dniAgente" id="dniAgente" placeholder="Ingresar DNI" required)
+                        .form-group
+                            label(for="nombre") NOMBRE:
+                            input.form-control(type="text" name="nombre" id="nombre" placeholder="Ingresar Nombre" required)
+                        .form-group
+                            label(for="apellido") APELLIDO:
+                            input.form-control(type="text" name="apellido" id="apellido" placeholder="Ingresar Apellido" required)
+                        .form-group
+                            label(for="fechaDeNacimiento") FECHA DE NACIMIENTO:
+                            input.form-control(type="date" name="fechaDeNacimiento" id="fechaDeNacimiento" required)
+                    .col-md-5
+                        .form-group
+                            label(for="genero") GENERO:
+                            select.form-control(name="genero" id="genero" required)
+                                option(value="masculino") Masculino
+                                option(value="femenino") Femenino
+                        .form-group
+                            label(for="mail") MAIL:
+                            input.form-control(type="email" name="mail" id="mail" placeholder="Ingresar Email" required)
+                        .form-group
+                            label(for="matricula") MATRICULA:
+                            input.form-control(type="text" name="matricula" id="matricula" placeholder="Ingresar Matricula Ej: MA-40230" required)
+                        .form-group
+                            input.form-control.btn.btn-light(type="submit", value="Guardar")

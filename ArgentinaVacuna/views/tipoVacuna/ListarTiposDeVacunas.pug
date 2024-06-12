@@ -1,0 +1,26 @@
+extends ../layout.pug
+
+block content
+    .contenedorVolverCrear
+        a.link(href="/")
+            | Volver Atrás
+            img(src='/images/volver.png', alt="Flecha hacia atrás")
+        h5
+            form(action=`/tipoVacuna/crear`, method="get")
+                input(type="submit", value="Añadir Nuevo Tipo de Vacuna")
+    table.table#tabla
+        thead
+            tr
+                th ID
+                th NOMBRE
+                th OPCIONES
+        tbody
+            each tip in listaDeTipos
+                tr
+                    td= tip.idTipoVacuna
+                    td= tip.nombre
+                    td(style="display: flex;")
+                        form(action=`/tipoVacuna/editar/${tip.idTipoVacuna}`, method="get")
+                            input.btn.btn-primary(type="submit", value="Editar")
+                        form(action=`/tipoVacuna/eliminar/${tip.idTipoVacuna}?_method=DELETE`, method="post")
+                            input.btn.btn-danger(type="submit", value="Borrar")

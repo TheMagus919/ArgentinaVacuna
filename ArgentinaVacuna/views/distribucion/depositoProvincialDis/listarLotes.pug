@@ -1,0 +1,27 @@
+extends ../../layout.pug
+
+block content
+    .contenedorVolverCrear
+        a.link(href="../")
+            | Volver Atrás
+            img(src='/images/volver.png', alt="Flecha hacia atrás")
+    h2 Listado de Lotes.
+    p Selecciona el Lote que sera trasladado al Deposito Provincial.
+    table.table#tabla
+        thead
+            tr
+                th ID LOTE PROVEEDOR
+                th NOMBRE COMERCIAL
+                th TIPO VACUNA
+                th CANTIDAD DE VACUNAS
+                th OPCIONES
+        tbody
+            each lote in listaDeLotes
+                tr
+                    td= lote.nroLote
+                    td= lote.LoteProveedor.nombreComercial
+                    td= lote.LoteProveedor.TipoVacuna.nombre
+                    td= lote.cantidadDeVacunas
+                    td 
+                        form(action=`/distribucion/distribucionDepoPro/crear/${lote.idDepNac}${lote.nroLote}`, method="get")
+                            input.btn.btn-primary(type="submit", value="Seleccionar")

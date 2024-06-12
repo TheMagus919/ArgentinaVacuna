@@ -1,0 +1,40 @@
+extends ../../layout.pug
+
+block content
+    .contenedorVolverCrear
+        a.link(href="../")
+            | Volver Atrás
+            img(src='/images/volver.png', alt="Flecha hacia atrás")
+    .consulta
+        h1 DISTRIBUCION DEPOSITO PROVINCIAL ID: #{distri.idDisDep}.
+        .contenido
+            h4 DEPOSITO NACIONAL QUE ENVIA:
+            ol
+                li ID: #{distri.idDepProv}
+                li NOMBRE: #{distri.DepositoNacional.nombre}
+                li PROVINCIA: #{distri.DepositoNacional.provincia}
+                li LOCALIDAD: #{distri.DepositoNacional.localidad}
+                li DIRECCION: #{distri.DepositoNacional.direccion}
+        .contenido
+            h4 LOTE PROVEEDOR:
+            ol 
+                li ID: #{distri.nroLote}
+                li NOMBRE COMERCIAL: #{distri.LoteProveedor.nombreComercial}
+                li CANTIDAD DE VACUNAS QUE CONTIENE: #{distri.LoteProveedor.cantidadDeVacunas}
+                li TIPO DE FRASCO: #{distri.LoteProveedor.tipoDeFrasco}
+                li TIPO DE VACUNA: #{distri.LoteProveedor.TipoVacuna.nombre}
+                li LABORATORIO: #{distri.LoteProveedor.Laboratorio.nombre}
+                li FECHA FABRICACION: #{distri.LoteProveedor.fechaDeFabricacion}
+                li FECHA VENCIMIENTO: #{distri.LoteProveedor.fechaDeVencimiento}
+        .contenido
+            h4 DEPOSITO PROVINCIAL QUE RECIBE: 
+            ol
+                li ID: #{distri.idDepProv}
+                li NOMBRE: #{distri.DepositoProvincial.nombre}
+                li PROVINCIA: #{distri.DepositoProvincial.provincia}
+                li LOCALIDAD: #{distri.DepositoProvincial.localidad}
+                li DIRECCION: #{distri.DepositoProvincial.direccion}
+        .contenido
+            h4 CANTIDAD DE VACUNAS QUE SE ENVIAN: #{distri.cantidadDeVacunas}
+            h4 FECHA DE SALIDA: #{distri.fechaDeSalidaDepNac}
+            h4 FECHA DE LLEGADA: #{distri.fechaLlegadaDepProv}

@@ -1,0 +1,36 @@
+extends ../../layout.pug
+
+block content
+    .contenedorVolverCrear
+        a.link(href="../")
+            | Volver Atrás
+            img(src='/images/volver.png', alt="Flecha hacia atrás")
+    .formulario
+        h1.text-center EDITAR DISTRIBUCION DEPOSITO NACIONAL ID: #{distri.idDisCentro}
+        .container
+            form.form(action="?_method=PUT" method="post")
+                .row.justify-content-between
+                    .col-md-6
+                        .form-group
+                            label(for="idDepProv") DEPOSITO PROVINCIAL ENVIA:
+                            input.form-control(type="text" name="idDepProv" id="idDepProv" value=`${distri.DepositoProvincial.idDepProv} - ${distri.DepositoProvincial.nombre}` readonly)
+                        .form-group
+                            label(for="nroLote") LOTE:
+                            input.form-control(type="text" name="nroLote" id="nroLote" value=`${distri.LoteProveedor.nroLote} - ${distri.LoteProveedor.nombreComercial}` readonly)
+                        .form-group
+                            label(for="cantidadDeVacunas") CANTIDAD DE VACUNAS:
+                            input.form-control(type="number" name="cantidadDeVacunas" id="cantidadDeVacunas" min="1" max=`${cantidad.cantidadDeVacunas}` value=`${distri.cantidadDeVacunas}` required)
+                    .col-md-6
+                        .form-group
+                            label(for="idCentro") CENTRO DE VACUNACION RECIBE:
+                            select.form-control(name="idCentro" id="idCentro" required)
+                                each cen in centros
+                                    option(value=`${cen.idCentro}` selected=`${cen.idCentro}`===`${distri.idCentro}`) #{cen.idCentro}  - #{cen.nombre}
+                        .form-group
+                            label(for="fechaDeSalidaDepProv") FECHA DE SALIDA:
+                            input.form-control(type="date" name="fechaDeSalidaDepProv" id="fechaDeSalidaDepProv" value=`${distri.fechaDeSalidaDepProv}` required)
+                        .form-group
+                            label(for="fechaLlegadaCentro") FECHA DE LLEGADA:
+                            input.form-control(type="date" name="fechaLlegadaCentro" id="fechaLlegadaCentro" value=`${distri.fechaLlegadaCentro}` required)
+                        .form-group
+                            input.form-control.btn.btn-light(type="submit", value="Guardar")

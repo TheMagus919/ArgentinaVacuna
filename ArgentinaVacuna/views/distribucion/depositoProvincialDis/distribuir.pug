@@ -1,0 +1,36 @@
+extends ../../layout.pug
+
+block content
+    .contenedorVolverCrear
+        a.link(href="../")
+            | Volver Atrás
+            img(src='/images/volver.png', alt="Flecha hacia atrás")
+    .formulario
+        h1.text-center TRASLADAR VACUNAS A UN DEPOSITO PROVINCIAL
+        .container
+            form.form(action="alta" method="post")
+                .row.justify-content-between
+                    .col-md-5
+                        .form-group
+                            label(for="idDepNac") DEPOSITO NACIONAL:
+                            input.form-control(type="text" name="idDepNac" id="idDepNac" value=`${distri.DepositoNacional.idDepNac} - ${distri.DepositoNacional.nombre}` readonly)
+                        .form-group
+                            label(for="nroLote") LOTE:
+                            input.form-control(type="text" name="nroLote" id="nroLote" value=`${distri.LoteProveedor.nroLote} - ${distri.LoteProveedor.nombreComercial}` readonly)
+                        .form-group
+                            label(for="cantidadDeVacunas") CANTIDAD DE VACUNAS:
+                            input.form-control(type="number" name="cantidadDeVacunas" id="cantidadDeVacunas" min="1" max=`${distri.cantidadDeVacunas}` placeholder=`Valores entre 1 y ${distri.cantidadDeVacunas}` required)
+                    .col-md-5
+                        .form-group
+                            label(for="idDepProv") DEPOSITO PROVINCIAL:
+                            select.form-control(name="idDepProv" id="idDepProv" required)
+                                each dep in depositos
+                                    option(value=`${dep.idDepProv}`) #{dep.idDepProv}  - #{dep.nombre}
+                        .form-group
+                            label(for="fechaDeSalidaDepNac") FECHA DE SALIDA:
+                            input.form-control(type="date" name="fechaDeSalidaDepNac" id="fechaDeSalidaDepNac" required)
+                        .form-group
+                            label(for="fechaLlegadaDepProv") FECHA DE LLEGADA:
+                            input.form-control(type="date" name="fechaLlegadaDepProv" id="fechaLlegadaDepProv" required)
+                        .form-group
+                            input.form-control.btn.btn-light(type="submit", value="Guardar")

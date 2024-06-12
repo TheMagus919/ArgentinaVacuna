@@ -1,0 +1,43 @@
+extends ../layout.pug
+
+block content
+    .contenedorVolverCrear
+        a.link(href="/")
+            | Volver Atrás
+            img(src='/images/volver.png', alt="Flecha hacia atrás")
+        h5
+            form(action=`/paciente/crear`, method="get")
+                input(type="submit", value="Añadir Nuevo Paciente")
+    table.table#tabla
+        thead
+            tr
+                th DNI
+                th NOMBRE
+                th APELLIDO
+                th FECHA DE NACIMIENTO
+                th GENERO
+                th MAIL
+                th CELULAR
+                th CELULAR DE RESPALDO
+                th LOCALIDAD
+                th OPCIONES
+        tbody
+            each pac in listaDePacientes
+                tr
+                    td= pac.dniPaciente
+                    td= pac.nombre
+                    td= pac.apellido
+                    td= pac.fechaDeNacimiento
+                    td= pac.genero
+                    td= pac.mail
+                    td= pac.celular
+                    if pac.celularDeRespaldo=="0" || pac.celularDeRespaldo== NULL
+                        td= "No proporcionado"
+                    else
+                        td= pac.celularDeRespaldo          
+                    td= pac.localidad
+                    td(style="display: flex;")
+                        form(action=`/paciente/editar/${pac.dniPaciente}`, method="get")
+                            input.btn.btn-primary(type="submit", value="Editar")
+                        form(action=`/paciente/eliminar/${pac.dniPaciente}?_method=DELETE`, method="post")
+                            input.btn.btn-danger(type="submit", value="Borrar")

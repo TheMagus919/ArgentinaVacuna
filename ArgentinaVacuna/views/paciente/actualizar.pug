@@ -1,0 +1,42 @@
+extends ../layout.pug
+
+block content
+    .contenedorVolverCrear
+        a.link(href="../")
+            | Volver Atrás
+            img(src='/images/volver.png', alt="Flecha hacia atrás")
+    .formulario
+        h1.text-center EDITAR PACIENTE DNI: #{pac.dniPaciente}
+        .container
+            form.form(action="?_method=PUT" method="post")
+                .row.justify-content-between
+                    .col-md-5
+                        .form-group
+                            label(for="nombre") NOMBRE:
+                            input.form-control(type="text" name="nombre" id="nombre" value=`${pac.nombre}` required)
+                        .form-group
+                            label(for="apellido") APELLIDO:
+                            input.form-control(type="text" name="apellido" id="apellido" value=`${pac.apellido}` required)
+                        .form-group
+                            label(for="fechaDeNacimiento") FECHA DE NACIMIENTO:
+                            input.form-control(type="date" name="fechaDeNacimiento" id="fechaDeNacimiento" value=`${pac.fechaDeNacimiento}` required)
+                        .form-group
+                            label(for="genero") GENERO:
+                            select.form-control(name="genero" id="genero" value=`${pac.genero}`)
+                                option(value="masculino" selected="masculino"===`${pac.genero}`) Masculino
+                                option(value="femenino" selected="femenino"===`${pac.genero}`) Femenino
+                    .col-md-5
+                        .form-group
+                            label(for="mail") MAIL:
+                            input.form-control(type="email" name="mail" id="mail" value=`${pac.mail}` required)
+                        .form-group
+                            label(for="localidad") LOCALIDAD:
+                            input.form-control(type="text" name="localidad" id="localidad"  value=`${pac.localidad}` required)
+                        .form-group
+                            label(for="celular") CELULAR:
+                            input.form-control(type="number" name="celular" id="celular" value=`${pac.celular}` required)
+                        .form-group
+                            label(for="celularDeRespaldo") CELULAR DE RESPALDO:
+                            input.form-control(type="number" name="celularDeRespaldo" id="celularDeRespaldo" value=`${pac.celularDeRespaldo}`)
+                        .form-group
+                            input.form-control.btn.btn-light(type="submit", value="Guardar")

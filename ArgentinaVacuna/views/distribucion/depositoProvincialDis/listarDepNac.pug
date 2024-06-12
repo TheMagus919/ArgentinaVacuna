@@ -1,0 +1,23 @@
+extends ../../layout.pug
+
+block content
+    .contenedorVolverCrear
+        a.link(href="./")
+            | Volver Atrás
+            img(src='/images/volver.png', alt="Flecha hacia atrás")
+    h2 Listado de Depositos Nacionales.
+    p Selecciona un Deposito Nacional para poder elegir el lote que sera trasladado al Deposito Provincial.
+    table.table#tabla
+        thead
+            tr
+                th ID DEPOSITO
+                th NOMBRE
+                th OPCIONES
+        tbody
+            each dep in listaDeDepositos
+                tr
+                    td= dep.DepositoNacional.idDepNac
+                    td= dep.DepositoNacional.nombre
+                    td 
+                        form(action=`/distribucion/distribucionDepoPro/depositos/lote/${dep.DepositoNacional.idDepNac}`, method="get")
+                            input.btn.btn-primary(type="submit", value="Seleccionar")

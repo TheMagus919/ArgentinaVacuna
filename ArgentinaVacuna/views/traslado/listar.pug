@@ -1,0 +1,39 @@
+extends ../layout.pug
+
+block content
+    .contenedorVolverCrear
+        a.link(href="/")
+            | Volver Atrás
+            img(src='/images/volver.png', alt="Flecha hacia atrás")
+        h5
+            form(action=`/traslado/crear`, method="get")
+                input(type="submit", value="Añadir Nuevo Registro de Traslado")
+    table.table#tabla
+        thead
+            tr
+                th ID
+                th CENTRO DE VACUNACION ENVIA
+                th LOTE PROVEEDOR
+                th CENTRO RECIBE
+                th CANTIDAD VACUNAS
+                th FECHA SALIDA
+                th FECHA LLEGADA
+                th OPCIONES
+
+        tbody
+            each tras in ListaTraslados
+                tr
+                    td= tras.idTraslado
+                    td= tras.centroEnvia.idCentro+" - "+tras.centroEnvia.nombre
+                    td= tras.LoteProveedor.nroLote+" - "+tras.LoteProveedor.nombreComercial
+                    td= tras.centroRecibe.idCentro+" - "+tras.centroRecibe.nombre
+                    td= tras.cantidadDeVacunas
+                    td= tras.fechaSalida
+                    td= tras.fechaLlegada
+                    td(style="display: flex;")
+                        form(action=`/traslado/consultar/${tras.idTraslado}`, method="get")
+                            input.btn.btn-primary(type="submit", value="Consultar")
+                        form(action=`/traslado/editar/${tras.idTraslado}`, method="get")
+                            input.btn.btn-secondary(type="submit", value="Editar")
+                        form(action=`/traslado/eliminar/${tras.idTraslado}?_method=DELETE`, method="post")
+                            input.btn.btn-danger(type="submit", value="Borrar")
