@@ -18,40 +18,40 @@ exports.editLote= function (req, res){
     .then(async (lote)=>{
         if(lote==null){
             res.render("error", {message:"Not Found",error:{status:404,stack:"No se encontro ningun Lote Proveedor con esa informacion."}});
+        }else{
+          var Labs =await Laboratorio.findAll();
+          var Tipos =await TipoVacuna.findAll();
+          res.render("loteProveedor/actualizar",{title:"Lote Proveedor",lote:lote,labs:Labs,tipos:Tipos});
         }
-        var Labs =await Laboratorio.findAll();
-        var Tipos =await TipoVacuna.findAll();
-        res.render("loteProveedor/actualizar",{title:"Lote Proveedor",lote:lote,labs:Labs,tipos:Tipos});
-        }
-    )
+    })
     .catch((err) => res.render("error", {error:err}));
 };
 
 exports.putLote =async function (req, res){
     try {
-        if(req.body.idLab != "" || req.body.idLab != null && req.body.idTipoVacuna != "" || req.body.idTipoVacuna != null && req.body.tipoDeFrasco != "" || req.body.tipoDeFrasco != null && req.body.nombreComercial != "" || req.body.nombreComercial != null && req.body.cantidadDeVacunas != "" || req.body.cantidadDeVacunas != null && req.body.fechaDeFabricacion != "" || req.body.fechaDeFabricacion != null && req.body.fechaDeVencimiento != "" || req.body.fechaDeVencimiento != null && req.body.fechaDeCompra != "" || req.body.fechaDeCompra != null){
-            const fechaActual = moment();
-            const fechaFab = moment(req.body.fechaDeFabricacion);
-            const fechaCom = moment(req.body.fechaDeCompra);
-            const fechaVen = moment(req.body.fechaDeVencimiento);
-            if(fechaFab.date() >= fechaActual.date() && fechaFab.month()>= fechaActual.month() && fechaFab.year() >= fechaActual.year()){
-                res.render("error", {message:"Bad Request",error:{status:400,stack:"Fecha de Fabricacion incorrecta."}});
-            }else if(fechaCom.date() >= fechaActual.date() && fechaCom.month()>= fechaActual.month() && fechaCom.year() >= fechaActual.year()){
-                res.render("error", {message:"Bad Request",error:{status:400,stack:"Fecha de Compra incorrecta."}});
+        if(req.body.idLab != "" || req.body.idLab != null && req.body.idTipoVacuna != "" || req.body.idTipoVacuna != null && req.body.tipoDeFrasco != "" || req.body.tipoDeFrasco != null && req.body.cantidadDeVacunas != "" || req.body.cantidadDeVacunas != null && req.body.fechaDeFabricacion != "" || req.body.fechaDeFabricacion != null && req.body.fechaDeVencimiento != "" || req.body.fechaDeVencimiento != null && req.body.fechaDeCompra != "" || req.body.fechaDeCompra != null){
+            const fechaActual = moment().format('L');
+            const fechaFab = moment(req.body.fechaDeFabricacion).format('L');
+            const fechaCom = moment(req.body.fechaDeCompra).format('L');
+            const fechaVen = moment(req.body.fechaDeVencimiento).format('L');
+            if(fechaFab >= fechaActual || fechaVen <= fechaFab || fechaCom >= fechaActual){
+                res.render("error", {message:"Bad Request",error:{status:400,stack:"Fechas incorrectas."}});
             }else{
-                await LoteProveedor.update({nroLote:req.params.id, idLab:req.body.idLab, idTipoVacuna:req.body.idTipoVacuna, tipoDeFrasco:req.body.tipoDeFrasco, nombreComercial:req.body.nombreComercial, cantidadDeVacunas:req.body.cantidadDeVacunas, fechaDeFabricacion:req.body.fechaDeFabricacion, fechaDeVencimiento:req.body.fechaDeVencimiento, fechaDeCompra:req.body.fechaDeCompra},{where:{nroLote: req.params.id}})
+                await LoteProveedor.update({nroLote:req.params.id, idLab:req.body.idLab, idTipoVacuna:req.body.idTipoVacuna, tipoDeFrasco:req.body.tipoDeFrasco, cantidadDeVacunas:req.body.cantidadDeVacunas, fechaDeFabricacion:req.body.fechaDeFabricacion, fechaDeVencimiento:req.body.fechaDeVencimiento, fechaDeCompra:req.body.fechaDeCompra},{where:{nroLote: req.params.id}})
                 .then((result)=> {
                     if(result[0] == 1){
                         res.redirect("/loteProveedor");
+                    }else{
+                        res.render("error", {message:"Internal Server Error",error:{status:500,stack:"El LoteProveedor no se pudo editar."}});
                     }
                 })
                 .catch((err) => res.render("error", {error:err}));
             }
         }else{
-            res.render("error", {message:"Bad Request",error:{status:400,stack:"Datos invalidos."}});
+            res.render("error", {message:"Bad Request",error:{status:400,stack:"Datos invalidos o incompletos."}});
         }   
     } catch (error) {
-        res.status(500).json({ message: "Error al editar un Lote Proveedor." });    
+        res.render("error", {error:error});   
     }
     
 };
@@ -65,32 +65,34 @@ exports.crear = async function (req, res){
 exports.alta = async function (req, res){
     try {
         if(req.body.nroLote != "" || req.body.nroLote != null && req.body.idLab != "" || req.body.idLab != null && req.body.idTipoVacuna != "" || req.body.idTipoVacuna != null && req.body.tipoDeFrasco != "" || req.body.tipoDeFrasco != null && req.body.nombreComercial != "" || req.body.nombreComercial != null && req.body.cantidadDeVacunas != "" || req.body.cantidadDeVacunas != null && req.body.fechaDeFabricacion != "" || req.body.fechaDeFabricacion != null && req.body.fechaDeVencimiento != "" || req.body.fechaDeVencimiento != null && req.body.fechaDeCompra != "" || req.body.fechaDeCompra != null){
-            const fechaActual = moment();
-            const fechaFab = moment(req.body.fechaDeFabricacion);
-            const fechaCom = moment(req.body.fechaDeCompra);
-            const fechaVen = moment(req.body.fechaDeVencimiento);
-            if(fechaFab.date() >= fechaActual.date() && fechaFab.month()>= fechaActual.month() && fechaFab.year() >= fechaActual.year()){
-                res.render("error", {message:"Bad Request",error:{status:400,stack:"Fecha de Fabricacion incorrecta."}});
-            }else if(fechaCom.date() >= fechaActual.date() && fechaCom.month()>= fechaActual.month() && fechaCom.year() >= fechaActual.year()){
-                res.render("error", {message:"Bad Request",error:{status:400,stack:"Fecha de Compra incorrecta."}});
+            const fechaActual = moment().format('L');
+            const fechaFab = moment(req.body.fechaDeFabricacion).format('L');
+            const fechaCom = moment(req.body.fechaDeCompra).format('L');
+            const fechaVen = moment(req.body.fechaDeVencimiento).format('L');
+            if(fechaFab >= fechaActual || fechaCom >= fechaActual || fechaVen <= fechaFab){
+                res.render("error", {message:"Bad Request",error:{status:400,stack:"Fechas incorrectas."}});
             }else{
-                LoteProveedor.findByPk(req.body.nroLote).then((result)=>{
+                const NombreExistente = await LoteProveedor.findOne({where:{nombreComercial:req.body.nombreComercial}});
+                const LoteExistente = await LoteProveedor.findByPk(req.body.nroLote);
+                if(NombreExistente ===null && LoteExistente===null){
+                  LoteProveedor.create({nroLote:req.body.nroLote, idLab:req.body.idLab, idTipoVacuna:req.body.idTipoVacuna, tipoDeFrasco:req.body.tipoDeFrasco, nombreComercial:req.body.nombreComercial, cantidadDeVacunas:req.body.cantidadDeVacunas, fechaDeFabricacion:req.body.fechaDeFabricacion, fechaDeVencimiento:req.body.fechaDeVencimiento, fechaDeCompra:req.body.fechaDeCompra, vencidas:false})
+                  .then((result)=>{
                     if(result){
-                        res.render("error", {message:"Bad Request",error:{status:400,stack:"El Lote ya existe."}});
+                      res.redirect("/loteProveedor");
                     }else{
-                        LoteProveedor.create({nroLote:req.body.nroLote, idLab:req.body.idLab, idTipoVacuna:req.body.idTipoVacuna, tipoDeFrasco:req.body.tipoDeFrasco, nombreComercial:req.body.nombreComercial, cantidadDeVacunas:req.body.cantidadDeVacunas, fechaDeFabricacion:req.body.fechaDeFabricacion, fechaDeVencimiento:req.body.fechaDeVencimiento, fechaDeCompra:req.body.fechaDeCompra})
-                        .then((result)=>{
-                            res.redirect("/loteProveedor");
-                        })
-                        .catch((err) => res.render("error", {error:err}));
+                      res.render("error", {message:"Internal Server Error",error:{status:500,stack:"El LoteProveedor no se pudo crear."}});
                     }
-                });
+                  })
+                  .catch((err) => res.render("error", {error:err}));
+                }else{
+                  res.render("error", {message:"Bad Request",error:{status:400,stack:"El Numero de Lote o Nombre Comercial se encuentra en uso."}});
+                }
             }
         }else{
-            res.render("error", {message:"Bad Request",error:{status:400,stack:"Datos invalidos."}});
+            res.render("error", {message:"Bad Request",error:{status:400,stack:"Datos invalidos o incompletos."}});
         }   
     } catch (error) {
-        res.status(500).json({ message: "Error al añadir nuevo Lote Proveedor." });    
+      res.render("error", {error:error});    
     }
 };
 
@@ -99,9 +101,10 @@ exports.eliminar = function (req, res){
     .then(async (result)=>{
         if(result==null){
             res.render("error", {message:"Not Found",error:{status:404,stack:"No se encontro ningun Lote Proveedor con esa informacion."}});
+        }else{
+          result.destroy();
+          res.redirect("/loteProveedor");
         }
-        result.destroy();
-        res.redirect("/loteProveedor");
     })
     .catch((err) => res.render("error", {error:err}));
 };
@@ -133,7 +136,7 @@ exports.listadoLotesXTipo = async function (req, res){
               },
               {
                 model: Descarte,
-                attributes: ['nroLote']
+                attributes: ['cantidadDeVacunas']
               }
             ]
           })
@@ -157,8 +160,8 @@ exports.listadoLotesXTipo = async function (req, res){
                 const almacenadasEnCentro = (lote.DistribucionCentros || []).reduce((acc, distribucion) => acc + distribucion.cantidadDeVacunas, 0);
                 const almacenadasEnNacion = (lote.TrasladoDepositos || []).reduce((acc, traslado) => acc + traslado.cantidadDeVacunas, 0);
                 const aplicadas = (lote.Aplicacions || []).length;
-                const descartadas = (lote.Descartes || []).length;
-                const vencidas = lote.vencidas === true ? lote.cantidadDeVacunas : 0;
+                const descartadas = (lote.Descartes || []).reduce((acc, descarte) => acc + descarte.cantidadDeVacunas, 0);
+                const vencidas = lote.vencidas ? lote.cantidadDeVacunas : 0;
           
                 acc[tipoVacuna].almacenadasEnProvincia += almacenadasEnProvincia;
                 acc[tipoVacuna].almacenadasEnCentro += almacenadasEnCentro;
@@ -172,8 +175,7 @@ exports.listadoLotesXTipo = async function (req, res){
               res.render("loteProveedor/listaDeLotes",{listaLotes:agrupadosPorTipoVacuna, title:"Lote Proveedor"});
           });
     } catch (error) {
-        console.error('Error al obtener el listado de lotes de proveedores por tipo de vacuna y estado:', error);
-        throw error;
+      res.render("error", {error:error});
     }
 };
 
@@ -223,6 +225,6 @@ exports.listarVacunasVencidas = function (req, res){
         .catch((err) => res.render("error", {error:err}));
         
       } catch (error) {
-        console.error('Error al obtener el listado de lotes de proveedores:', error);
+        res.render("error", {error:error});
       }
 };

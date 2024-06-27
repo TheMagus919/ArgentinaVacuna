@@ -5,6 +5,7 @@ block content
         a.link(href="./")
             | Volver Atrás
             img(src='/images/volver.png', alt="Flecha hacia atrás")
+    h4 Listado de Personas que se les aplico Vacunas vencidas:
     table.table#tabla
         thead
             tr
@@ -16,8 +17,8 @@ block content
         tbody
             each lista in listadoVencidas
                 tr
-                    td= lista.pacienteDNI
-                    td= lista.pacienteNombre
+                    td= lista.dni
+                    td= lista.paciente
                     td= lista.centro
                     td= lista.provincia
                     td= lista.tipoVacuna

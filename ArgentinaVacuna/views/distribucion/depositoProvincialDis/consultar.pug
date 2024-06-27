@@ -26,6 +26,8 @@ block content
                 li LABORATORIO: #{distri.LoteProveedor.Laboratorio.nombre}
                 li FECHA FABRICACION: #{distri.LoteProveedor.fechaDeFabricacion}
                 li FECHA VENCIMIENTO: #{distri.LoteProveedor.fechaDeVencimiento}
+                if distri.LoteProveedor.vencidas
+                    li VENCIDAS: SI
         .contenido
             h4 DEPOSITO PROVINCIAL QUE RECIBE: 
             ol

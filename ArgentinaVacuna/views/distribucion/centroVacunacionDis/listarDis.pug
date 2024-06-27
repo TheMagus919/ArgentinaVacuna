@@ -34,8 +34,6 @@ block content
                         if dis.LoteProveedor.vencidas
                             form(action=`/distribucion/distribucionCentroVac/consultar/${dis.idDisCentro}`, method="get")
                                 input.btn.btn-primary(type="submit", value="Consultar")
-                            form(action=`/distribucion/distribucionCentroVac/eliminar/${dis.idDisCentro}?_method=DELETE`, method="post")
-                                input.btn.btn-danger(type="submit", value="Eliminar")
                         else
                             form(action=`/distribucion/distribucionCentroVac/consultar/${dis.idDisCentro}`, method="get")
                                 input.btn.btn-primary(type="submit", value="Consultar")

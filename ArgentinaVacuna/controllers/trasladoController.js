@@ -2,6 +2,7 @@ const {Traslado, CentroDeVacunacion,Descarte, DistribucionCentro, LoteProveedor,
 const {Op} = require('sequelize');
 const sequelize = require('sequelize');
 const mysql = require('mysql2');
+const moment = require("moment");
 
 
 exports.listarCentros = async function (req, res){
@@ -66,9 +67,13 @@ exports.alta = async function (req, res){
 
     var dis = await DistribucionCentro.findOne({where:[{idCentro:centro},{nroLote:lote}]});
     const cantidad = parseInt(dis.cantidadDeVacunas);
+    
     try {
         if(req.body.idCentroEnvia != null || req.body.idCentroEnvia != "" && req.body.nroLote != null || req.body.nroLote != "" &&  req.body.cantidadDeVacunas != null || req.body.cantidadDeVacunas != "" && req.body.idCentroRecibe != null || req.body.idCentroRecibe != "" && req.body.fechaSalida != null || req.body.fechaSalida != "" && req.body.fechaLlegada != null || req.body.fechaLlegada != ""){
-            if(req.body.fechaSalida > req.body.fechaLlegada){
+            const fechaDis = moment(dis.fechaLlegadaCentro).format('L');
+            const fechaSalida = moment(req.body.fechaSalida).format('L');
+            const fechaLlegada = moment(req.body.fechaLlegada).format('L');
+            if(fechaSalida > fechaLlegada || fechaSalida < fechaDis){
                 res.render("error", {message:"Bad Request",error:{status:400,stack:"Las Fechas ingresadas son invalidas."}});
             }else{
                 if(req.body.cantidadDeVacunas > cantidad){
@@ -79,7 +84,11 @@ exports.alta = async function (req, res){
                     const cant = cantidad - numero2;
                         await DistribucionCentro.update({idDisCentro:dis.idDisCentro, nroLote:dis.nroLote, cantidadDeVacunas:cant, idDepPro:dis.idDepPro, fechaDeSalidaDepPro:dis.fechaDeSalidaDepPro, idCentro:dis.idCentro, fechaLlegadaCentro:dis.fechaLlegadaCentro},{where:{idDisCentro:dis.idDisCentro}})
                         .then((respu)=>{
-                            res.redirect("/traslado");
+                            if(respu){
+                                res.redirect("/traslado");
+                            }else{
+                                res.render("error", {message:"Internal Server Error",error:{status:500,stack:"No se pudo realizar el traslado."}});
+                            }
                         })
                         .catch((err)=>res.render("error", {error:err}));
                 }
@@ -95,13 +104,12 @@ exports.editTraslado = async function (req, res){
     .then(async (result)=>{
         if(result == null){
             res.render("error", {message:"Not Found",error:{status:404,stack:"No se encontro ningun Agente de Salud con esa informacion."}});
+        }else{
+            const centros = await CentroDeVacunacion.findAll({where:{idCentro:{[Op.not]:result.idCentroEnvia}}});
+            const ress = await DistribucionCentro.findOne({include:LoteProveedor},{where:[{idCentro:result.idCentroEnvia},{nroLote:result.nroLote}]});
+            res.render("traslado/editar",{title:"Traslado", tras:result,centros:centros, cantidad:ress});
         }
-        console.log(result)
-        const centros = await CentroDeVacunacion.findAll({where:{idCentro:{[Op.not]:result.idCentroEnvia}}});
-        const ress = await DistribucionCentro.findOne({include:LoteProveedor},{where:[{idCentro:result.idCentroEnvia},{nroLote:result.nroLote}]});
-        res.render("traslado/editar",{title:"Traslado", tras:result,centros:centros, cantidad:ress});
-        }
-    )
+    })
     .catch((err) => res.render("error", {error:err}));
 };
 
@@ -125,12 +133,13 @@ exports.putTraslado = async function (req, res){
     const cantidadTotal = cantidad + cantidadT;
     try {
         if(req.body.idCentroEnvia != null || req.body.idCentroEnvia != "" && req.body.nroLote != null || req.body.nroLote != "" &&  req.body.cantidadDeVacunas != null || req.body.cantidadDeVacunas != "" && req.body.idCentroRecibe != null || req.body.idCentroRecibe != "" && req.body.fechaSalida != null || req.body.fechaSalida != "" && req.body.fechaLlegada != null || req.body.fechaLlegada != ""){
-            if(req.body.fechaSalida > req.body.fechaLlegada){
-                console.log("entro error 1");
+            const fechaDis = moment(dis.fechaLlegadaCentro).format('L');
+            const fechaSalida = moment(req.body.fechaSalida).format('L');
+            const fechaLlegada = moment(req.body.fechaLlegada).format('L');
+            if(fechaSalida > fechaLlegada || fechaSalida < fechaDis){
                 res.render("error", {message:"Bad Request",error:{status:400,stack:"Las Fechas ingresadas son invalidas."}});
             }else{
                 if(req.body.cantidadDeVacunas > cantidadTotal){
-                    console.log("entro error 2");
                     res.render("error", {message:"Bad Request",error:{status:400,stack:"Las Cantidad de Vacunas ingresadas no son invalidas."}});
                 }else{
                     Traslado.update({idCentroEnvia:centro, nroLote:lote, cantidadDeVacunas:req.body.cantidadDeVacunas, idCentroRecibe:cen, fechaSalida:req.body.fechaSalida, fechaLlegada:req.body.fechaLlegada},{where:{idTraslado:req.params.id}});
@@ -149,14 +158,15 @@ exports.putTraslado = async function (req, res){
     }
 };
 
-exports.eliminar = async function (req, res){
+exports.eliminar = function (req, res){
     Traslado.findByPk(req.params.id)
-    .then((result)=>{
+    .then(async(result)=>{
         if(result == null){
             res.render("error", {message:"Not Found",error:{status:404,stack:"No se encontro ningun Registro de Traslado con esa informacion."}});
+        }else{
+            result.destroy();
+            res.redirect("/traslado");
         }
-        result.destroy();
-        res.redirect("/traslado/asd");
     })
     .catch((err)=>res.render("error", {error:err}));
 };

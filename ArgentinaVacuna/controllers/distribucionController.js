@@ -21,29 +21,59 @@ exports.listarLotesDepoNac = async function (req, res){
     try {
         const descartadas = await Descarte.findAll({attributes:['nroLote']});
         const listaDescarte = [];
+        const lotesTrasladados = await TrasladoDeposito.findAll({attributes:['nroLote']});
+        const listaTrasladadas = [];
+        const listaCompleta = [];
         for(var i=0;i<descartadas.length;i++){
             listaDescarte.push(descartadas[i].nroLote);
+            listaCompleta.push(descartadas[i].nroLote);
+        }
+        for(var i=0;i<lotesTrasladados.length;i++){
+            listaTrasladadas.push(lotesTrasladados[i].nroLote);
+            listaCompleta.push(lotesTrasladados[i].nroLote);
         }
         if(descartadas==null || descartadas.length === 0){
-            await LoteProveedor.findAll({include:TipoVacuna, where:{cantidadDeVacunas:{[Op.gt]:0},vencidas: false}})
-            .then((result)=>{
-                if(result == null || result.length === 0){
-                    res.render("error", {message:"Not Found",error:{status:404,stack:"No se encontro ninguna informacion con los datos proporcionados."}});
-                }else{
-                    res.render("distribucion/depositoNacionalDis/listarLotes",{title:"Distribucion Deposito Nacional", listaDeLotes:result});
-                }
-            })
-            .catch((err) => res.render("error", {error:err}));
+            if(lotesTrasladados ==null || lotesTrasladados.length ===0){
+                await LoteProveedor.findAll({include:TipoVacuna, where:{cantidadDeVacunas:{[Op.gt]:0},vencidas: false}})
+                .then((result)=>{
+                    if(result == null){
+                        res.render("error", {message:"Not Found",error:{status:404,stack:"No se encontro ninguna informacion con los datos proporcionados."}});
+                    }else{
+                        res.render("distribucion/depositoNacionalDis/listarLotes",{title:"Distribucion Deposito Nacional", listaDeLotes:result});
+                    }
+                }).catch((err) => res.render("error", {error:err}));
+            }else{
+                await LoteProveedor.findAll({include:TipoVacuna, where:{cantidadDeVacunas:{[Op.gt]:0},vencidas: false,nroLote:{[Op.notIn]:listaTrasladadas}}})
+                .then((result)=>{
+                    if(result == null){
+                        res.render("error", {message:"Not Found",error:{status:404,stack:"No se encontro ninguna informacion con los datos proporcionados."}});
+                    }else{
+                        res.render("distribucion/depositoNacionalDis/listarLotes",{title:"Distribucion Deposito Nacional", listaDeLotes:result});
+                    }
+                }).catch((err) => res.render("error", {error:err}));
+            }
         }else{
-            await LoteProveedor.findAll({include:TipoVacuna, where:{cantidadDeVacunas:{[Op.gt]:0},vencidas: false,nroLote:{[Op.notIn]: listaDescarte}}})
-            .then((result)=>{
-                if(result == null || result.length === 0){
-                    res.render("error", {message:"Not Found",error:{status:404,stack:"No se encontro ninguna informacion con los datos proporcionados."}});
-                }else{
-                    res.render("distribucion/depositoNacionalDis/listarLotes",{title:"Distribucion Deposito Nacional", listaDeLotes:result});
-                }
-            })
-            .catch((err) => res.render("error", {error:err}));
+            if(lotesTrasladados ==null || lotesTrasladados.length ===0){
+                await LoteProveedor.findAll({include:TipoVacuna, where:{cantidadDeVacunas:{[Op.gt]:0},vencidas: false,nroLote:{[Op.notIn]: listaDescarte}}})
+                .then((result)=>{
+                    if(result == null){
+                        res.render("error", {message:"Not Found",error:{status:404,stack:"No se encontro ninguna informacion con los datos proporcionados."}});
+                    }else{
+                        res.render("distribucion/depositoNacionalDis/listarLotes",{title:"Distribucion Deposito Nacional", listaDeLotes:result});
+                    }
+                })
+                .catch((err) => res.render("error", {error:err}));
+            }else{
+                await LoteProveedor.findAll({include:TipoVacuna, where:{cantidadDeVacunas:{[Op.gt]:0},vencidas: false,nroLote:{[Op.notIn]: listaCompleta}}})
+                .then((result)=>{
+                    if(result == null){
+                        res.render("error", {message:"Not Found",error:{status:404,stack:"No se encontro ninguna informacion con los datos proporcionados."}});
+                    }else{
+                        res.render("distribucion/depositoNacionalDis/listarLotes",{title:"Distribucion Deposito Nacional", listaDeLotes:result});
+                    }
+                })
+                .catch((err) => res.render("error", {error:err}));
+            }
         }
     } catch (error) {
         res.render("error", {error:error});
@@ -62,11 +92,7 @@ exports.editDistribucionDepoNac = async function (req, res){
             res.render("error", {message:"Bad Request",error:{status:400,stack:"No se puede editar el registro de distribucion a Deposito Nacional cuando el lote esta vencido o fue descartado."}});
         }else{
             const depositosNac = await DepositoNacional.findAll();
-            const lote = await LoteProveedor.findByPk(trasladoDep.nroLote);
-            const cantLote = parseInt(lote.cantidadDeVacunas);
-            const cantT = parseInt(trasladoDep.cantidadDeVacunas);
-            const total = cantLote + cantT;
-            res.render("distribucion/depositoNacionalDis/editar",{title:"Distribucion Deposito Nacional", cantidad:total,traslado:trasladoDep,depositos:depositosNac});
+            res.render("distribucion/depositoNacionalDis/editar",{title:"Distribucion Deposito Nacional", traslado:trasladoDep,depositos:depositosNac});
         }
         } catch (error) {
         res.render("error", {error:error});
@@ -82,29 +108,30 @@ exports.putDistribucionDepoNac = async function (req, res){
     const partesL = textoLote.split('-');
     var lote = partesL[0].trim();
 
-    const loteP = await LoteProveedor.findByPk(lote);
-    const cantidad = parseInt(loteP.cantidadDeVacunas);
     const trasD = await TrasladoDeposito.findByPk(req.params.id);
     const cantidadD = parseInt(trasD.cantidadDeVacunas);
-    const cantidadTotal = cantidad + cantidadD;
+
+    var loteP = await LoteProveedor.findByPk(lote);
+
+    const fechaFab = moment(loteP.fechaDeFabricacion).format('L');
+    const fechaVen = moment(loteP.fechaDeVencimiento).format('L');
+    const fechaCom = moment(loteP.fechaDeCompra).format('L');
+    const fechaAd = moment(req.body.fechaDeAdquisicion).format('L');
     try {
-        if(req.body.idDepNac!= null || req.body.idDepNac != "" && req.body.nroLote != null || req.body.nroLote != "" &&  req.body.cantidadDeVacunas != null || req.body.cantidadDeVacunas != "" && req.body.fechaDeAdquisicion != null || req.body.fechaDeAdquisicion != ""){
-            if(req.body.fechaDeAdquisicion < loteP.fechaDeFabricacion || req.body.fechaDeAdquisicion > loteP.fechaDeVencimiento || loteP.vencidas == true){
+        if(req.body.idDepNac!= null || req.body.idDepNac != "" && req.body.nroLote != null || req.body.nroLote != "" && req.body.fechaDeAdquisicion != null || req.body.fechaDeAdquisicion != ""){
+            if(fechaAd <= fechaFab || fechaAd < fechaCom || fechaAd >= fechaVen || loteP.vencidas == true){
                 res.render("error", {message:"Bad Request",error:{status:400,stack:"Las Fechas ingresadas son invalidas."}});
             }else {
-                    if(req.body.cantidadDeVacunas > cantidadTotal){
-                        res.render("error", {message:"Bad Request",error:{status:400,stack:"Las Cantidad de Vacunas ingresadas no son invalidas."}});
+                TrasladoDeposito.update({idDepNac:depoN, nroLote:lote, cantidadDeVacunas:cantidadD, fechaDeAdquisicion:req.body.fechaDeAdquisicion},{where:{idTrasladoDep:req.params.id}})
+                .then((respu)=>{
+                    if(respu){
+                        res.redirect("/distribucion/distribucionDepoNac");
                     }else{
-                        TrasladoDeposito.update({idDepNac:depoN, nroLote:lote, cantidadDeVacunas:req.body.cantidadDeVacunas, fechaDeAdquisicion:req.body.fechaDeAdquisicion},{where:{idTrasladoDep:req.params.id}});
-                        const numero2 = parseInt(req.body.cantidadDeVacunas);
-                        const cant = cantidadTotal - numero2;
-                            await LoteProveedor.update({nroLote:loteP.nroLote, idLab:loteP.idLab, idTipoVacuna:loteP.idTipoVacuna, tipoDeFrasco:loteP.tipoDeFrasco, nombreComercial:loteP.nombreComercial, cantidadDeVacunas:cant, fechaDeFabricacion:loteP.fechaDeFabricacion, fechaDeVencimiento:loteP.fechaDeVencimiento, fechaDeCompra:loteP.fechaDeCompra},{where:{nroLote:loteP.nroLote}})
-                            .then((respu)=>{
-                                res.redirect("/distribucion/distribucionDepoNac");
-                            })
-                            .catch((err)=>res.render("error", {error:err}));
+                        res.render("error", {message:"Internal Server Error",error:{status:500,stack:"La Distribucion al Deposito Nacional no se pudo editar."}});
                     }
-                }
+                })
+                .catch((err)=>res.render("error", {error:err}));   
+            }
         }
     } catch (error) {
         res.render("error", {error:error});
@@ -141,26 +168,28 @@ exports.altaDistribucionDepoNac = async function (req, res){
         for(var i=0;i<descartadas.length;i++){
             listaDescarte.push(descartadas[i].nroLote);
         }
+    
+    const fechaFab = moment(loteP.fechaDeFabricacion).format('L');
+    const fechaVen = moment(loteP.fechaDeVencimiento).format('L');
+    const fechaCom = moment(loteP.fechaDeCompra).format('L');
+    const fechaAd = moment(req.body.fechaDeAdquisicion).format('L');
 
     try {
-        if(req.body.idDepNac!= null || req.body.idDepNac != "" && req.body.nroLote != null || req.body.nroLote != "" &&  req.body.cantidadDeVacunas != null || req.body.cantidadDeVacunas != "" && req.body.fechaDeAdquisicion != null || req.body.fechaDeAdquisicion != ""){
-            if(req.body.fechaDeAdquisicion < loteP.fechaDeFabricacion || req.body.fechaDeAdquisicion > loteP.fechaDeVencimiento || loteP.vencidas == true){
+        if(req.body.idDepNac!= null || req.body.idDepNac != "" && req.body.nroLote != null || req.body.nroLote != "" && req.body.fechaDeAdquisicion != null || req.body.fechaDeAdquisicion != ""){
+            if(fechaAd <= fechaFab || fechaAd < fechaCom || fechaAd >= fechaVen || loteP.vencidas == true){
                 res.render("error", {message:"Bad Request",error:{status:400,stack:"Las Fechas ingresadas son invalidas."}});
             }else if(Object.values(listaDescarte).includes(lote)){
                 res.render("error", {message:"Bad Request",error:{status:400,stack:"El Lote a sido descartado."}});
             }else{
-                if(req.body.cantidadDeVacunas > cantidad){
-                    res.render("error", {message:"Bad Request",error:{status:400,stack:"Las Cantidad de Vacunas ingresadas no son invalidas."}});
-                }else{
-                    TrasladoDeposito.create({idDepNac:depoN, nroLote:lote, cantidadDeVacunas:req.body.cantidadDeVacunas, fechaDeAdquisicion:req.body.fechaDeAdquisicion});
-                    const numero2 = parseInt(req.body.cantidadDeVacunas);
-                    const cant = cantidad - numero2;
-                        await LoteProveedor.update({nroLote:loteP.nroLote, idLab:loteP.idLab, idTipoVacuna:loteP.idTipoVacuna, tipoDeFrasco:loteP.tipoDeFrasco, nombreComercial:loteP.nombreComercial, cantidadDeVacunas:cant, fechaDeFabricacion:loteP.fechaDeFabricacion, fechaDeVencimiento:loteP.fechaDeVencimiento, fechaDeCompra:loteP.fechaDeCompra},{where:{nroLote:loteP.nroLote}})
-                        .then((respu)=>{
-                            res.redirect("/distribucion/distribucionDepoNac");
-                        })
-                        .catch((err)=>res.render("error", {error:err}));
-                }
+                TrasladoDeposito.create({idDepNac:depoN, nroLote:lote, cantidadDeVacunas:cantidad, fechaDeAdquisicion:req.body.fechaDeAdquisicion})
+                .then((respu)=>{
+                    if(respu){
+                        res.redirect("/distribucion/distribucionDepoNac");
+                    }else{
+                        res.render("error", {message:"Internal Server Error",error:{status:500,stack:"La Distribucion al Deposito Nacional no se pudo crear."}});
+                    }
+                })
+                .catch((err)=>res.render("error", {error:err}));
             }
         }
     } catch (error) {
@@ -181,9 +210,10 @@ exports.eliminarDistribucionDepoNac = function (req, res){
     .then(async (result)=>{
         if(result == null){
             res.render("error", {message:"Not Found",error:{status:404,stack:"No se encontro ningun Registro de Distribucion con esa informacion."}});
+        }else{
+            result.destroy();
+            res.redirect("/distribucion/distribucionDepoNac");
         }
-        result.destroy();
-        res.redirect("/distribucion/distribucionDepoNac");
     })
     .catch((err) => res.render("error", {error:err}));
 };
@@ -201,7 +231,6 @@ exports.listarDistribucionDepoPro = async function (req, res){
 exports.listarDepositosNacDepoPro = async function (req, res){
     TrasladoDeposito.findAll({include:{ model: DepositoNacional},where:{cantidadDeVacunas:{[Op.gt]:0}},group: 'nombre'})
     .then((result)=>{
-        console.log(result);
         if(result == null || result.length === 0){
             res.render("error", {message:"Not Found",error:{status:404,stack:"No se encontro ninguna informacion con los datos proporcionados."}});
         }else{
@@ -281,11 +310,9 @@ exports.putDistribucionDepoPro = async function (req, res){
     try {
         if(req.body.idDepProv != null || req.body.idDepProv != "" && req.body.nroLote != null || req.body.nroLote != "" &&  req.body.cantidadDeVacunas != null || req.body.cantidadDeVacunas != "" && req.body.idDepNac!= null || req.body.idDepNac != "" && req.body.fechaDeSalidaDepNac != null || req.body.fechaDeSalidaDepNac != "" && req.body.fechaLlegadaDepProv != null || req.body.fechaLlegadaDepProv != ""){
             if(req.body.fechaDeSalidaDepNac > req.body.fechaLlegadaDepProv || req.body.fechaDeSalidaDepNac < disDepN.fechaDeAdquisicion){
-                console.log("entro error 1");
                 res.render("error", {message:"Bad Request",error:{status:400,stack:"Las Fechas ingresadas son invalidas."}});
             }else{
                 if(req.body.cantidadDeVacunas > cantidadTotal){
-                    console.log("entro error 2");
                     res.render("error", {message:"Bad Request",error:{status:400,stack:"Las Cantidad de Vacunas ingresadas no son invalidas."}});
                 }else{
                     await DistribucionDeposito.update({idDepNac:depoN, nroLote:lote, cantidadDeVacunas:req.body.cantidadDeVacunas, idDepProv:depoP, fechaDeSalidaDepNac:req.body.fechaDeSalidaDepNac, fechaLlegadaDepProv:req.body.fechaLlegadaDepProv},{where:{idDisDep:req.params.id}});
@@ -342,13 +369,11 @@ exports.altaDistribucionDepoPro = async function (req, res){
     try {
         if(req.body.idDepProv != null || req.body.idDepProv != "" && req.body.nroLote != null || req.body.nroLote != "" &&  req.body.cantidadDeVacunas != null || req.body.cantidadDeVacunas != "" && req.body.idDepNac != null || req.body.idDepNac != "" && req.body.fechaDeSalidaDepNac != null || req.body.fechaDeSalidaDepNac != "" && req.body.fechaLlegadaDepProv != null || req.body.fechaLlegadaDepProv != ""){
             if(req.body.fechaDeSalidaDepNac > req.body.fechaLlegadaDepProv || req.body.fechaDeSalidaDepNac < dis.fechaDeAdquisicion){
-                console.log("entro error 1");
                 res.render("error", {message:"Bad Request",error:{status:400,stack:"Las Fechas ingresadas son invalidas."}});
             }else if(Object.values(listaDescarte).includes(lote)){
                 res.render("error", {message:"Bad Request",error:{status:400,stack:"El Lote a sido descartado."}});
             }else{
                 if(req.body.cantidadDeVacunas > cantidad){
-                    console.log("entro error 2");
                     res.render("error", {message:"Bad Request",error:{status:400,stack:"Las Cantidad de Vacunas ingresadas no son invalidas."}});
                 }else{
                     DistribucionDeposito.create({idDepNac:depoN, idDepProv:depoP, nroLote:lote, cantidadDeVacunas:req.body.cantidadDeVacunas, fechaDeSalidaDepNac:req.body.fechaDeSalidaDepNac, fechaLlegadaDepProv:req.body.fechaLlegadaDepProv});
@@ -521,18 +546,16 @@ exports.altaDistribucionCentroVac = async function (req, res){
             listaDescarte.push(descartadas[i].nroLote);
     }
 
-    var dis = await DistribucionDeposito.findOne({where:[{idDisDep:depo},{nroLote:lote}]});
+    var dis = await DistribucionDeposito.findOne({where:[{idDepProv:depo},{nroLote:lote}]});
     const cantidad = parseInt(dis.cantidadDeVacunas);
     try {
         if(req.body.idDepProv != null || req.body.idDepProv != "" && req.body.nroLote != null || req.body.nroLote != "" &&  req.body.cantidadDeVacunas != null || req.body.cantidadDeVacunas != "" && req.body.idCentro != null || req.body.idCentro != "" && req.body.fechaDeSalidaDepProv != null || req.body.fechaDeSalidaDepProv != "" && req.body.fechaLlegadaCentro != null || req.body.fechaLlegadaCentro != ""){
             if(req.body.fechaDeSalidaDepProv > req.body.fechaLlegadaCentro || req.body.fechaDeSalidaDepProv < dis.fechaLlegadaDepProv){
-                console.log("entro error 1");
                 res.render("error", {message:"Bad Request",error:{status:400,stack:"Las Fechas ingresadas son invalidas."}});
             }else if(Object.values(listaDescarte).includes(lote)){
                 res.render("error", {message:"Bad Request",error:{status:400,stack:"El Lote a sido descartado."}});
             }else{
                 if(req.body.cantidadDeVacunas > cantidad){
-                    console.log("entro error 2");
                     res.render("error", {message:"Bad Request",error:{status:400,stack:"Las Cantidad de Vacunas ingresadas no son invalidas."}});
                 }else{
                     DistribucionCentro.create({idDepProv:depo, nroLote:lote, cantidadDeVacunas:req.body.cantidadDeVacunas, idCentro:cen, fechaDeSalidaDepProv:req.body.fechaDeSalidaDepProv, fechaLlegadaCentro:req.body.fechaLlegadaCentro});
@@ -612,7 +635,6 @@ exports.listaStock =async  function (req, res){
         })
         .catch((err) => res.render("error", {error:err}));
     } catch (error) {
-        console.error('Error al obtener el stock disponible por tipo de vacuna por provincia:', error);
-        throw error;
+        res.render("error", {error:error});
     }
 };

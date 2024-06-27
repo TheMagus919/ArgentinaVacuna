@@ -15,14 +15,11 @@ block content
                             label(for="nroLote") LOTE:
                             input.form-control(type="text" name="nroLote" id="nroLote" value=`${lote.nroLote} - ${lote.nombreComercial}` readonly)
                         .form-group
-                            label(for="cantidadDeVacunas") CANTIDAD DE VACUNAS:
-                            input.form-control(type="number" name="cantidadDeVacunas" id="cantidadDeVacunas" min="1" max=`${lote.cantidadDeVacunas}` placeholder=`Valores entre 1 y ${lote.cantidadDeVacunas}` required)
-                    .col-md-6
-                        .form-group
                             label(for="idDepNac") DEPOSITO NACIONAL QUE RECIBE:
                             select.form-control(name="idDepNac" id="idDepNac" required)
                                 each dep in depositos
                                     option(value=`${dep.idDepNac}`) #{dep.idDepNac}  - #{dep.nombre}
+                    .col-md-6
                         .form-group
                             label(for="fechaDeAdquisicion") FECHA DE ADQUISICION:
                             input.form-control(type="date" name="fechaDeAdquisicion" id="fechaDeAdquisicion" required)

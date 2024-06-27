@@ -24,7 +24,4 @@ block content
                     td= lote.almacenadasEnCentro
                     td= lote.aplicadas
                     td= lote.descartadas
-                    if lote.vencidas 
-                        td="Si"
-                    else 
-                        td="No"
+                    td= lote.vencidas

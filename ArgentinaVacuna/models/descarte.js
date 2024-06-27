@@ -31,6 +31,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: true,
       allowNull: false,
     },
+    cantidadDeVacunas:{
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     formaDescarte:{
       type: DataTypes.STRING,
       allowNull: false,

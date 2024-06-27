@@ -20,32 +20,31 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
-  },
-  nroLote: {
+    },
+    nroLote: {
+        type: DataTypes.INTEGER,
+        foreignKey: true,
+        allowNull: false,
+    },
+    cantidadDeVacunas:{
       type: DataTypes.INTEGER,
-      foreignKey: true,
       allowNull: false,
-  },
-  cantidadDeVacunas:{
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  idDepNac: {
-      type: DataTypes.INTEGER,
-      foreignKey: true,
-      allowNull: false,
-  },
-  fechaDeAdquisicion: {
-      type: DataTypes.DATEONLY,
-      allowNull: false,
-  },
+    },
+    idDepNac: {
+        type: DataTypes.INTEGER,
+        foreignKey: true,
+        allowNull: false,
+    },
+    fechaDeAdquisicion: {
+        type: DataTypes.DATEONLY,
+        allowNull: false,
+    },
   },
   {
-    sequelize,
-    timestamps: false,
-    modelName: "TrasladoDeposito",
-    tableName: "trasladoDeposito",
+      sequelize,
+      timestamps: false,
+      modelName: "TrasladoDeposito",
+      tableName: "trasladoDeposito",
   });
-  //sequelize.sync({force:true});
   return TrasladoDeposito;
 };
