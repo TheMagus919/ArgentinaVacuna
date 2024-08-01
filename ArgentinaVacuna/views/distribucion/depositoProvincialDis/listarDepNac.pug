@@ -5,19 +5,21 @@ block content
         a.link(href="./")
             | Volver Atrás
             img(src='/images/volver.png', alt="Flecha hacia atrás")
-    h2 Listado de Depositos Nacionales.
-    p Selecciona un Deposito Nacional para poder elegir el lote que sera trasladado al Deposito Provincial.
+    h2 Listado de Lotes Disponibles.
+    p Seleccione el Lote que desea Solicitar.
     table.table#tabla
         thead
             tr
-                th ID DEPOSITO
-                th NOMBRE
+                th DEPOSITO NACIONAL
+                th LOTE PROVEEDOR
+                th CANTIDAD DE VACUNAS
                 th OPCIONES
         tbody
-            each dep in listaDeDepositos
+            each dep in ListaDepositos
                 tr
-                    td= dep.DepositoNacional.idDepNac
-                    td= dep.DepositoNacional.nombre
+                    td= dep.DepositoNacional.idDepNac +" - "+ dep.DepositoNacional.nombre
+                    td= dep.LoteProveedor.nroLote +" - "+ dep.LoteProveedor.nombreComercial
+                    td= dep.cantidadDeVacunas
                     td 
-                        form(action=`/distribucion/distribucionDepoPro/depositos/lote/${dep.DepositoNacional.idDepNac}`, method="get")
+                        form(action=`/distribucion/distribucionDepoPro/deposito/lote/${dep.DepositoNacional.idDepNac}/${dep.nroLote}`, method="get")
                             input.btn.btn-primary(type="submit", value="Seleccionar")

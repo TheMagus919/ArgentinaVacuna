@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Traslado.belongsTo(models.CentroDeVacunacion, { as: 'centroEnvia', foreignKey: 'idCentroEnvia' });
       Traslado.belongsTo(models.CentroDeVacunacion, { as: 'centroRecibe', foreignKey: 'idCentroRecibe' });
-      Traslado.belongsTo(models.LoteProveedor, { foreignKey: 'nroLote' })
+      Traslado.belongsTo(models.LoteProveedor, { foreignKey: 'nroLote'})
     }
   }
   Traslado.init({
@@ -33,11 +33,11 @@ module.exports = (sequelize, DataTypes) => {
   },
     fechaSalida:{
       type: DataTypes.DATEONLY,
-      allowNull: false,
+      allowNull: true,
   },
     fechaLlegada:{
       type: DataTypes.DATEONLY,
-      allowNull: false,
+      allowNull: true,
   },
     idCentroEnvia:{
       type: DataTypes.INTEGER,
@@ -48,7 +48,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       foreignKey: true,
       allowNull: false,
-  }
+  },
+  descartado: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+  },
   },
   {
     sequelize,

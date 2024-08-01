@@ -1,16 +1,20 @@
 const express = require("express");
 const router = express.Router();
 const controllers = require("../controllers/aplicacionController");
+const Usuario = require('../controllers/agenteDeSaludController');
 
-router.get("/", controllers.listar);
-router.get("/crear", controllers.listarCentros);
-router.post("/crear", controllers.obtener);
-router.post("/alta", controllers.alta);
-router.get("/editar/:id", controllers.editAplicacion);
-router.put("/editar/:id", controllers.putAplicacion);
-router.delete("/eliminar/:id", controllers.eliminar);
+router.get("/", Usuario.authMiddleware, Usuario.roleMiddleware('Medico'), controllers.listar);
+router.get("/crear", Usuario.authMiddleware, Usuario.roleMiddleware('Medico'), controllers.listarCentros);
+router.post("/crear", Usuario.authMiddleware, Usuario.roleMiddleware('Medico'), controllers.obtener);
+router.post("/alta", Usuario.authMiddleware, Usuario.roleMiddleware('Medico'), controllers.alta);
+router.delete("/eliminar/:id", Usuario.authMiddleware, Usuario.roleMiddleware('Medico'), controllers.eliminar);
+router.get("/consultar/:id", Usuario.authMiddleware, Usuario.roleMiddleware('Medico'), controllers.consultar);
 
-router.get("/listaPacientes", controllers.listaPacientesXTipoVacuna);
-router.get("/listaVencidasAplicadas", controllers.listaPacientesXVacunaVencida);
+router.get("/crear/paciente", Usuario.authMiddleware, Usuario.roleMiddleware('Medico'), controllers.crearPaciente);
+router.post("/crear/paciente", Usuario.authMiddleware, Usuario.roleMiddleware('Medico'), controllers.altaPaciente);
+
+router.get("/listaPacientes", Usuario.authMiddleware, Usuario.roleMiddleware('Medico'), controllers.listaPacientesXTipoVacuna);
+//router.get("/listaVencidasAplicadas", Usuario.authMiddleware, Usuario.roleMiddleware('Medico'), controllers.listaPacientesXVacunaVencida);
+router.get("/stockDisponible", Usuario.authMiddleware, Usuario.roleMiddleware('Medico'), controllers.stockDisponible);
 
 module.exports = router;

@@ -60,10 +60,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATEONLY,
         allowNull: false,
     },
-    fechaDeCompra: {
-        type: DataTypes.DATEONLY,
-        allowNull: false,
-    },
     vencidas:{
       type: DataTypes.BOOLEAN,
       allowNull: false,

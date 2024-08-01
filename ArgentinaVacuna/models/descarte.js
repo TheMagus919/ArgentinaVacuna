@@ -13,6 +13,9 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Descarte.belongsTo(models.AgenteDeSalud, { foreignKey:'dniAgente'})
       Descarte.belongsTo(models.LoteProveedor, { foreignKey:'nroLote'})
+      Descarte.belongsTo(models.DepositoNacional, { foreignKey:'idDepNac'})
+      Descarte.belongsTo(models.DepositoProvincial, { foreignKey:'idDepProv'})
+      Descarte.belongsTo(models.CentroDeVacunacion, { foreignKey:'idCentro'})
     }
   }
   Descarte.init({
@@ -50,6 +53,21 @@ module.exports = (sequelize, DataTypes) => {
     fechaDeDescarte: {
       type: DataTypes.DATEONLY,
       allowNull: false,
+    },
+    idDepNac: {
+      type: DataTypes.INTEGER,
+      foreignKey: true,
+      allowNull: true,
+    },
+    idDepProv: {
+      type: DataTypes.INTEGER,
+      foreignKey: true,
+      allowNull: true,
+    },
+    idCentro: {
+      type: DataTypes.INTEGER,
+      foreignKey: true,
+      allowNull: true,
     },
   },
   {

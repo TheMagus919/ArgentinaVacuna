@@ -1,39 +1,79 @@
 extends ../layout.pug
 
 block content
-    .contenedorVolverCrear
-        a.link(href="/")
-            | Volver Atrás
-            img(src='/images/volver.png', alt="Flecha hacia atrás")
-        h5
-            form(action=`/traslado/crear`, method="get")
-                input(type="submit", value="Añadir Nuevo Registro de Traslado")
-    table.table#tabla
-        thead
-            tr
-                th ID
-                th CENTRO DE VACUNACION ENVIA
-                th LOTE PROVEEDOR
-                th CENTRO RECIBE
-                th CANTIDAD VACUNAS
-                th FECHA SALIDA
-                th FECHA LLEGADA
-                th OPCIONES
-
-        tbody
-            each tras in ListaTraslados
+    if rol == "Administrador"
+        .contenedorVolverCrear
+            a.link(href="/")
+                | Volver Atrás
+                img(src='/images/volver.png', alt="Flecha hacia atrás")
+        h4(style="margin:20px;") LISTA DE TRASLADOS
+        table.table#tabla
+            thead
                 tr
-                    td= tras.idTraslado
-                    td= tras.centroEnvia.idCentro+" - "+tras.centroEnvia.nombre
-                    td= tras.LoteProveedor.nroLote+" - "+tras.LoteProveedor.nombreComercial
-                    td= tras.centroRecibe.idCentro+" - "+tras.centroRecibe.nombre
-                    td= tras.cantidadDeVacunas
-                    td= tras.fechaSalida
-                    td= tras.fechaLlegada
-                    td(style="display: flex;")
-                        form(action=`/traslado/consultar/${tras.idTraslado}`, method="get")
-                            input.btn.btn-primary(type="submit", value="Consultar")
-                        form(action=`/traslado/editar/${tras.idTraslado}`, method="get")
-                            input.btn.btn-secondary(type="submit", value="Editar")
-                        form(action=`/traslado/eliminar/${tras.idTraslado}?_method=DELETE`, method="post")
-                            input.btn.btn-danger(type="submit", value="Borrar")
+                    th ID
+                    th CENTRO DE VACUNACION ENVIA
+                    th LOTE PROVEEDOR
+                    th CENTRO RECIBE
+                    th CANTIDAD VACUNAS
+                    th FECHA SALIDA
+                    th FECHA LLEGADA
+                    th OPCIONES
+
+            tbody
+                each tras in ListaTraslados
+                    tr
+                        td= tras.idTraslado
+                        td= tras.centroEnvia.idCentro+" - "+tras.centroEnvia.nombre
+                        td= tras.LoteProveedor.nroLote+" - "+tras.LoteProveedor.nombreComercial
+                        td= tras.centroRecibe.idCentro+" - "+tras.centroRecibe.nombre
+                        td= tras.cantidadDeVacunas
+                        if tras.fechaSalida == null
+                            td En Proceso 
+                        else 
+                            td= tras.fechaSalida
+                        if tras.fechaLlegada == null
+                            td En Proceso 
+                        else 
+                            td= tras.fechaLlegada
+                        td(style="display: flex;")
+                            form(action=`/traslado/editar/${tras.idTraslado}`, method="get")
+                                input.btn.btn-primary(type="submit", value="Editar")
+                            input.btn.btn-danger(type="button" onclick=`eliminarRegistroTraslado(${tras.idTraslado},this)` value="Eliminar")
+    else
+        .contenedorVolverCrear
+            a.link(href="/")
+                | Volver Atrás
+                img(src='/images/volver.png', alt="Flecha hacia atrás")
+            h5
+                form(action=`/traslado/crear`, method="get")
+                    input(type="submit", value="Solicitar Traslado de Vacunas")
+        a.linkopcion(href="/traslado/trasladosEnProceso" style="margin-right:10px;") Listar Traslados en Proceso
+        a.linkopcion(href="/traslado/listaSolicitudes" style="margin-right:10px;") Listar Solicitudes Recibidas
+        a.linkopcion(href="/traslado/solicitudesPendientes" style="margin-right:10px;") Mis Solicitudes
+        a.linkopcion(href="/traslado/registroDescartes" style="margin-right:10px;") Registro Descartes
+        h4(style="margin:20px;") LISTA DE TRASLADOS
+        table.table#tabla
+            thead
+                tr
+                    th ID
+                    th CENTRO DE VACUNACION ENVIA
+                    th LOTE PROVEEDOR
+                    th CENTRO RECIBE
+                    th CANTIDAD VACUNAS
+                    th FECHA SALIDA
+                    th FECHA LLEGADA
+                    th OPCIONES
+
+            tbody
+                each tras in ListaTraslados
+                    tr
+                        td= tras.idTraslado
+                        td= tras.centroEnvia.idCentro+" - "+tras.centroEnvia.nombre
+                        td= tras.LoteProveedor.nroLote+" - "+tras.LoteProveedor.nombreComercial
+                        td= tras.centroRecibe.idCentro+" - "+tras.centroRecibe.nombre
+                        td= tras.cantidadDeVacunas
+                        td= tras.fechaSalida
+                        td= tras.fechaLlegada
+                        td(style="display: flex;")
+                            form(action=`/traslado/consultar/${tras.idTraslado}`, method="get")
+                                input.btn.btn-primary(type="submit", value="Consultar")

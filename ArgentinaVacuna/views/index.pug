@@ -3,46 +3,61 @@ extends layout
 block content
   .introduccion 
     h2 Argentina Vacuna es una pagina web dedicada a ofrecer ayuda al Ministerio de Salud mejorando efectivamente la gestion, distribucion y administracion de Vacunas en todo el Pais.
-  .contenedor
-    .items 
-      .titulo
-        h3 AGENTES
-      .cuerpo
-        p Administrar y gestionar los Agentes de Salud.
-        form(action=`/agenteDeSalud`, method="get")
-          input(type="submit", value="ADMINISTRAR")
-    .items 
-      .titulo
-        h3 CENTROS DE VACUNACION
-      .cuerpo
-        p Administrar y gestionar los Centros de Vacunacion.
-        form(action=`/centroDeVacunacion`, method="get")
-          input(type="submit", value="ADMINISTRAR")
-    .items 
-      .titulo
-        h3 DEPOSITOS NACIONALES
-      .cuerpo
-        p Administrar y gestionar los distintos Depositos Nacionales esparcidos a lo largo de nuestro pais.
-        form(action=`/depositoNacional`, method="get")
-          input(type="submit", value="ADMINISTRAR")
-    .items 
-      .titulo
-        h3 DEPOSITOS PROVINCIALES
-      .cuerpo
-        p Administrar y gestionar los Depositos Provinciales.
-        form(action=`/depositoProvincial`, method="get")
-          input(type="submit", value="ADMINISTRAR")
-    .items 
-      .titulo
-        h3 LABORATORIO
-      .cuerpo
-        p Administrar y gestionar los Laboratorios internacionales.
-        form(action=`/laboratorio`, method="get")
-          input(type="submit", value="ADMINISTRAR")
-    .items 
-      .titulo
-        h3 TIPOS DE VACUNAS
-      .cuerpo
-        p Administrar y gestionar los Tipos de Vacunas.
-        form(action=`/tipoVacuna`, method="get")
-          input(type="submit", value="ADMINISTRAR")
+  if rol == "Administrador"
+    .contenedor
+      .items 
+        .titulo
+          h3 TRASLADOS
+        .cuerpo
+          p Administrar y gestionar los Traslados.
+          form(action=`/traslado`, method="get")
+            input(type="submit", value="ADMINISTRAR")
+      .items 
+        .titulo
+          h3 CENTROS DE VACUNACION
+        .cuerpo
+          p Administrar y gestionar los Centros de Vacunacion.
+          form(action=`/centroDeVacunacion`, method="get")
+            input(type="submit", value="ADMINISTRAR")
+      .items 
+        .titulo
+          h3 DEPOSITOS NACIONALES
+        .cuerpo
+          p Administrar y gestionar los distintos Depositos Nacionales esparcidos a lo largo de nuestro pais.
+          form(action=`/depositoNacional`, method="get")
+            input(type="submit", value="ADMINISTRAR")
+      .items 
+        .titulo
+          h3 DEPOSITOS PROVINCIALES
+        .cuerpo
+          p Administrar y gestionar los Depositos Provinciales.
+          form(action=`/depositoProvincial`, method="get")
+            input(type="submit", value="ADMINISTRAR")
+      .items 
+        .titulo
+          h3 LABORATORIO
+        .cuerpo
+          p Administrar y gestionar los Laboratorios internacionales.
+          form(action=`/laboratorio`, method="get")
+            input(type="submit", value="ADMINISTRAR")
+      .items 
+        .titulo
+          h3 TIPOS DE VACUNAS
+        .cuerpo
+          p Administrar y gestionar los Tipos de Vacunas.
+          form(action=`/tipoVacuna`, method="get")
+            input(type="submit", value="ADMINISTRAR")
+      .items 
+        .titulo
+          h3 LOTE PROVEEDOR
+        .cuerpo
+          p Administrar y gestionar los Lotes Proveedores.
+          form(action=`/loteProveedor`, method="get")
+            input(type="submit", value="ADMINISTRAR")
+      .items 
+        .titulo
+          h3 PACIENTES
+        .cuerpo
+          p Administrar y gestionar los Pacientes.
+          form(action=`/paciente`, method="get")
+            input(type="submit", value="ADMINISTRAR")

@@ -15,14 +15,12 @@ block content
                             label(for="nombre") NOMBRE:
                             input.form-control(type="text" name="nombre" id="nombre" value=`${centro.nombre}` required)
                         .form-group
-                            label(for="provincia") PROVINCIA:
-                            input.form-control(type="text" name="provincia" id="provincia" value=`${centro.provincia}` required)
-                    .col-md-5
-                        .form-group
                             label(for="localidad") LOCALIDAD:
                             input.form-control(type="text" name="localidad" id="localidad" value=`${centro.localidad}` required)
+                    .col-md-5
                         .form-group
                             label(for="direccion") DIRECCION:
                             input.form-control(type="text" name="direccion" id="direccion" value=`${centro.direccion}` required)
                         .form-group
+                            label(for="")
                             input.form-control.btn.btn-light(type="submit", value="Guardar")

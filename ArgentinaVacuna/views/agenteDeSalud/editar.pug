@@ -6,25 +6,65 @@ block content
             | Volver Atrás
             img(src='/images/volver.png', alt="Flecha hacia atrás")
     .formulario
-        h1.text-center EDITAR AGENTE DE SALUD DNI: #{ag.dniAgente}
+        h1.text-center PERFIL:
         .container
-            form.form(action="?_method=PUT" method="post")
+            form.form( id="perfil" action="?_method=PUT" method="post")
                 .row.justify-content-between
                     .col-md-5
                         .form-group
                             label(for="nombre") NOMBRE:
-                            input.form-control(type="text" name="nombre" id="nombre" value=`${ag.nombre}` required)
+                            input.form-control(type="text" name="nombre" id="nombre" value=`${ag.nombre}` readOnly)
                         .form-group
                             label(for="apellido") APELLIDO:
-                            input.form-control(type="text" name="apellido" id="apellido" value=`${ag.apellido}` required)
-                    .col-md-5
+                            input.form-control(type="text" name="apellido" id="apellido" value=`${ag.apellido}` readOnly)
+                        .form-group
+                            label(for="dniAgente") DNI:
+                            input.form-control(type="number" name="dniAgente" id="dniAgente" value=`${ag.dniAgente}` readOnly)
+                        .form-group
+                            label(for="mail") EMAIL:
+                            input.form-control(type="mail" name="mail" id="mail" value=`${ag.mail}` readOnly)
                         .form-group
                             label(for="fechaDeNacimiento") FECHA DE NACIMIENTO:
-                            input.form-control(type="date" name="fechaDeNacimiento" id="fechaDeNacimiento" value=`${ag.fechaDeNacimiento}` required)
+                            input.form-control(type="date" name="fechaDeNacimiento" id="fechaDeNacimiento" value=`${ag.fechaDeNacimiento}` readOnly)
+                    .col-md-5
                         .form-group
                             label(for="genero") GENERO:
-                            select.form-control(name="genero" id="genero" required)
+                            select.form-control(name="genero" id="genero" disabled)
                                 option(value="masculino" selected="masculino"===`${ag.genero}`) Masculino
                                 option(value="femenino" selected="femenino"===`${ag.genero}`) Femenino
                         .form-group
-                            input.form-control.btn.btn-light(type="submit", value="Guardar")
+                            label(for="provincia") PROVINCIA:
+                            input.form-control(type="provincia" name="provincia" id="provincia" value=`${ag.provincia}` readOnly)
+                            //select.form-control(name="provincia" id="provincia" disabled)
+                                option(value="Buenos Aires" selected="Buenos Aires"===`${ag.provincia}`) Buenos Aires
+                                option(value="Catamarca" selected="Catamarca"===`${ag.provincia}`) Catamarca
+                                option(value="Chaco" selected="Chaco"===`${ag.provincia}`) Chaco
+                                option(value="Chubut" selected="Chubut"===`${ag.provincia}`) Chubut
+                                option(value="Córdoba" selected="Córdoba"===`${ag.provincia}`) Córdoba
+                                option(value="Corrientes" selected="Corrientes"===`${ag.provincia}`) Corrientes
+                                option(value="Entre Ríos" selected="Entre Ríos"===`${ag.provincia}`) Entre Ríos
+                                option(value="Formosa" selected="Formosa"===`${ag.provincia}`) Formosa
+                                option(value="Jujuy" selected="Jujuy"===`${ag.provincia}`) Jujuy
+                                option(value="La Pampa" selected="La Pampa"===`${ag.provincia}`) La Pampa
+                                option(value="La Rioja" selected="La Rioja"===`${ag.provincia}`) La Rioja
+                                option(value="Mendoza" selected="Mendoza"===`${ag.provincia}`) Mendoza
+                                option(value="Misiones" selected="Misiones"===`${ag.provincia}`) Misiones
+                                option(value="Neuquén" selected="Neuquén"===`${ag.provincia}`) Neuquén
+                                option(value="Río Negro" selected="Río Negro"===`${ag.provincia}`) Río Negro
+                                option(value="Salta" selected="Salta"===`${ag.provincia}`) Salta
+                                option(value="San Juan" selected="San Juan"===`${ag.provincia}`) San Juan
+                                option(value="San Luis" selected="San Luis"===`${ag.provincia}`) San Luis
+                                option(value="Santa Cruz" selected="Santa Cruz"===`${ag.provincia}`) Santa Cruz
+                                option(value="Santa Fe" selected="Santa Fe"===`${ag.provincia}`) Santa Fe
+                                option(value="Santiago del Estero" selected="Santiago del Estero"===`${ag.provincia}`) Santiago del Estero
+                                option(value="Tierra del Fuego" selected="Tierra del Fuego"===`${ag.provincia}`) Tierra del Fuego
+                                option(value="Tucumán" selected="Tucumán"===`${ag.provincia}`) Tucumán
+                        .form-group
+                            label(for="matricula") MATRICULA:
+                            input.form-control(type="text" name="matricula" id="matricula" value=`${ag.matricula}` readOnly)
+                        .form-group
+                            label(for="rol") ROL:
+                            input.form-control(type="text" name="rol" id="rol" value=`${ag.rol}` readOnly)
+                        .form-group(style="display: flex;")
+                            input.form-control.btn.btn-success(type="button" id="editarPerfil" onclick="permitirEdicion()" value="Editar")
+                            input.form-control.btn.btn-light(type="submit" id="guardarPerfil" value="Guardar" hidden)

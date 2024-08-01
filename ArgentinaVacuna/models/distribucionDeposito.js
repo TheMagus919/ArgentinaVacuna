@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     fechaDeSalidaDepNac: {
         type: DataTypes.DATEONLY,
-        allowNull: false,
+        allowNull: true,
     },
     idDepProv: {
         type: DataTypes.INTEGER,
@@ -47,7 +47,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     fechaLlegadaDepProv: {
         type: DataTypes.DATEONLY,
-        allowNull: false,
+        allowNull: true,
+    },
+    descartado: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
     },
   },
   {

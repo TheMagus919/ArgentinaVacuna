@@ -8,9 +8,9 @@ block content
     .consulta
         h1 DISTRIBUCION DEPOSITO PROVINCIAL ID: #{distri.idDisDep}.
         .contenido
-            h4 DEPOSITO NACIONAL QUE ENVIA:
+            h4 DEPOSITO NACIONAL:
             ol
-                li ID: #{distri.idDepProv}
+                li ID: #{distri.idDepNac}
                 li NOMBRE: #{distri.DepositoNacional.nombre}
                 li PROVINCIA: #{distri.DepositoNacional.provincia}
                 li LOCALIDAD: #{distri.DepositoNacional.localidad}
@@ -29,7 +29,7 @@ block content
                 if distri.LoteProveedor.vencidas
                     li VENCIDAS: SI
         .contenido
-            h4 DEPOSITO PROVINCIAL QUE RECIBE: 
+            h4 DEPOSITO PROVINCIAL: 
             ol
                 li ID: #{distri.idDepProv}
                 li NOMBRE: #{distri.DepositoProvincial.nombre}
@@ -38,5 +38,13 @@ block content
                 li DIRECCION: #{distri.DepositoProvincial.direccion}
         .contenido
             h4 CANTIDAD DE VACUNAS QUE SE ENVIAN: #{distri.cantidadDeVacunas}
-            h4 FECHA DE SALIDA: #{distri.fechaDeSalidaDepNac}
-            h4 FECHA DE LLEGADA: #{distri.fechaLlegadaDepProv}
+            if distri.fechaDeSalidaDepNac == null 
+                h4 FECHA DE SALIDA: En proceso
+            else
+                h4 FECHA DE SALIDA: #{distri.fechaDeSalidaDepNac}
+            if distri.fechaLlegadaDepProv == null 
+                h4 FECHA DE LLEGADA: En proceso
+            else
+                h4 FECHA DE LLEGADA: #{distri.fechaLlegadaDepProv}
+            
+            

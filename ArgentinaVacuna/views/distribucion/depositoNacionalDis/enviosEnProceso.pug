@@ -1,0 +1,30 @@
+extends ../../layout.pug
+
+block content
+    .contenedorVolverCrear
+        a.link(href="/distribucion/distribucionDepoNac")
+            | Volver Atrás
+            img(src='/images/volver.png', alt="Flecha hacia atrás")
+    h2 ENVIOS EN PROCESO:
+    table.table#tabla
+        thead
+            tr
+                th ID
+                th DEPOSITO NACIONAL
+                th LOTE PROVEEDOR
+                th DEPOSITO PROVINCIAL
+                th CANTIDAD VACUNAS
+                th FECHA DE SALIDA
+                th FECHA DE LLEGADA
+
+        tbody
+            each dis in ListaDistribucion
+                tr
+                    td= dis.idDisDep
+                    td= dis.DepositoNacional.idDepNac+" - "+dis.DepositoNacional.nombre
+                    td= dis.LoteProveedor.nroLote+" - "+dis.LoteProveedor.nombreComercial
+                    td= dis.DepositoProvincial.idDepProv+" - "+dis.DepositoProvincial.nombre
+                    td= dis.cantidadDeVacunas
+                    td= dis.fechaDeSalidaDepNac
+                    if dis.fechaLlegadaDepProv == null 
+                        td= "En Proceso"

@@ -1,0 +1,22 @@
+extends ../layout.pug
+
+block content
+    .contenedorVolverCrear
+        a.link(href="/laboratorio")
+            | Volver Atrás
+            img(src='/images/volver.png', alt="Flecha hacia atrás")
+    .consulta
+        h1 STOCK DISPONIBLE:
+        if listaStock.length === 0 
+            .contenido
+                h4 No hay Stock.
+        else 
+            each stock in listaStock
+                .contenido
+                    h4(style="text-align: center;") NUMERO DE LOTE: #{stock.nroLote}
+                    ul 
+                        li NOMBRE COMERCIAL: #{stock.nombreComercial}
+                        li CANTIDAD DE VACUNAS: #{stock.cantidadDeVacunas}
+                        li TIPO DE VACUNA: #{stock.TipoVacuna.nombre}
+                        li TIPO DE FRASCO: #{stock.tipoDeFrasco}
+                        li FECHA DE VENCIMIENTO: #{stock.fechaDeVencimiento}

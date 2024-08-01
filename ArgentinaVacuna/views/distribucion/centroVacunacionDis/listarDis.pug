@@ -1,21 +1,33 @@
 extends ../../layout.pug
 
 block content
-    .contenedorVolverCrear
-        a.link(href="/distribucion")
-            | Volver Atrás
-            img(src='/images/volver.png', alt="Flecha hacia atrás")
-        h5
-            form(action=`/distribucion/distribucionCentroVac/depositos`, method="get")
-                input(type="submit", value="Añadir Registro Distribucion Centro de Vacunacion")
-    a.linkopcion(href="/distribucion/distribucionCentroVac/stock") Stock disponible para Vacunar
+    if rol == "Administrador"
+        .contenedorVolverCrear
+            a.link(href="/")
+                | Volver Atrás
+                img(src='/images/volver.png', alt="Flecha hacia atrás")
+        h4(style="margin:20px;") LISTA DE DISTRIBUCION A CENTROS DE VACUNACION
+    else
+        .contenedorVolverCrear
+            a.link(href="/")
+                | Volver Atrás
+                img(src='/images/volver.png', alt="Flecha hacia atrás")
+            .formOpciones(style="display: flex;")
+                h5
+                    form(action=`/distribucion/distribucionCentroVac/depositos`, method="get")
+                        input(type="submit", value="Solicitar Vacunas")
+        a.linkopcion(href="/distribucion/distribucionCentroVac/registrarIngreso" style="margin-right:10px;") Listar Ingresos en Proceso
+        a.linkopcion(href="/distribucion/distribucionCentroVac/solicitudes" style="margin-right:10px;") Mis Solicitudes
+        a.linkopcion(href="/distribucion/distribucionCentroVac/registroEnvios" style="margin-right:10px;") Registro de Envios
+        a.linkopcion(href="/distribucion/distribucionCentroVac/registroDescartes" style="margin-right:10px;") Registro de Descartes
+        h4(style="margin:20px;") LISTA DE DISTRIBUCION A CENTROS DE VACUNACION
     table.table#tabla
         thead
             tr
                 th ID
-                th DEPOSITO PROVINCIAL QUE ENVIA
+                th DEPOSITO PROVINCIAL
                 th LOTE PROVEEDOR
-                th CENTRO DE VACUNACION QUE RECIBE
+                th CENTRO DE VACUNACION
                 th CANTIDAD VACUNAS
                 th FECHA SALIDA
                 th FECHA LLEGADA
@@ -26,21 +38,16 @@ block content
                     td= dis.idDisCentro
                     td= dis.DepositoProvincial.idDepProv+" - "+dis.DepositoProvincial.nombre
                     td= dis.LoteProveedor.nroLote+" - "+dis.LoteProveedor.nombreComercial
-                    td= dis.CentroDeVacunacion.idCentro+" - "+dis.CentroDeVacunacion.nombre
+                    td= dis.DistribucionCentroVac.idCentro+" - "+dis.DistribucionCentroVac.nombre
                     td= dis.cantidadDeVacunas
                     td= dis.fechaDeSalidaDepProv
                     td= dis.fechaLlegadaCentro
                     td(style="display: flex;")
-                        if dis.LoteProveedor.vencidas
-                            form(action=`/distribucion/distribucionCentroVac/consultar/${dis.idDisCentro}`, method="get")
-                                input.btn.btn-primary(type="submit", value="Consultar")
+                        if rol == "Administrador"
+                            form(action=`/distribucion/distribucionCentroVac/editar/${dis.idDisCentro}`, method="get")
+                                input.btn.btn-primary(type="submit", value="Editar")
+                            input.btn.btn-danger(type="button" onclick=`eliminarRegistroCentroVac(${dis.idDisCentro},this)` value="Eliminar")
                         else
                             form(action=`/distribucion/distribucionCentroVac/consultar/${dis.idDisCentro}`, method="get")
                                 input.btn.btn-primary(type="submit", value="Consultar")
-                            form(action=`/distribucion/distribucionCentroVac/editar/${dis.idDisCentro}`, method="get")
-                                input.btn.btn-secondary(type="submit", value="Editar")
-                            form(action=`/distribucion/distribucionCentroVac/eliminar/${dis.idDisCentro}?_method=DELETE`, method="post")
-                                input.btn.btn-danger(type="submit", value="Eliminar")
-                                    
-                            
                             

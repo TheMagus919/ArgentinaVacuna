@@ -1,0 +1,25 @@
+extends ../../layout.pug
+
+block content
+    .contenedorVolverCrear
+        a.link(href="/distribucion/distribucionDepoPro")
+            | Volver Atrás
+            img(src='/images/volver.png', alt="Flecha hacia atrás")
+    h2 Listado de Depositos Provinciales.
+    p Selecciona el Deposito del cual quiere Enviar vacunas.
+    table.table#tabla
+        thead
+            tr
+                th ID
+                th NOMBRE
+                th LOCALIDAD
+                th OPCIONES
+        tbody
+            each dep in ListaDepositos
+                tr
+                    td= dep.idDepProv
+                    td= dep.nombre
+                    td= dep.localidad 
+                    td
+                        form(action=`/distribucion/distribucionDepoPro/enviar/${dep.idDepProv}`, method="get")
+                            input.btn.btn-primary(type="submit", value="Seleccionar")

@@ -35,9 +35,17 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: true,
         allowNull: false,
     },
-    fechaDeAdquisicion: {
+    fechaDeCompra: {
         type: DataTypes.DATEONLY,
         allowNull: false,
+    },
+    fechaDeAdquisicion: {
+        type: DataTypes.DATEONLY,
+        allowNull: true,
+    },
+    descartado: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
     },
   },
   {

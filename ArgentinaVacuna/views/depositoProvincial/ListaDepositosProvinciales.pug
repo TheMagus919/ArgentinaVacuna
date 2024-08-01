@@ -1,19 +1,26 @@
 extends ../layout.pug
 
 block content
-    .contenedorVolverCrear
-        a.link(href="/")
-            | Volver Atrás
-            img(src='/images/volver.png', alt="Flecha hacia atrás")
-        h5
-            form(action=`/depositoProvincial/crear`, method="get")
-                input(type="submit", value="Añadir Nuevo Deposito Provincial")
+    if rol == "Administrador"
+        .contenedorVolverCrear
+            a.link(href="/")
+                | Volver Atrás
+                img(src='/images/volver.png', alt="Flecha hacia atrás")
+            h5
+                form(action=`/depositoProvincial/crear`, method="get")
+                    input(type="submit", value="Añadir Deposito Provincial")
+        h4(style="margin:20px;") LISTA DE DEPOSITOS PROVINCIALES
+    else 
+        .contenedorVolverCrear
+            a.link(href="/")
+                | Volver Atrás
+                img(src='/images/volver.png', alt="Flecha hacia atrás")
+        h3(style="margin:20px;")  Lista de Depositos Provinciales de #{provincia} en donde trabaja:
     table.table#tabla
         thead
             tr
                 th ID
                 th NOMBRE
-                th PROVINCIA
                 th LOCALIDAD
                 th DIRECCION
                 th OPCIONES
@@ -22,11 +29,13 @@ block content
                 tr
                     td= depPro.idDepProv
                     td= depPro.nombre
-                    td= depPro.provincia
                     td= depPro.localidad
                     td= depPro.direccion
                     td(style="display: flex;")
-                        form(action=`/depositoProvincial/editar/${depPro.idDepProv}`, method="get")
-                            input.btn.btn-primary(type="submit", value="Editar")
-                        form(action=`/depositoProvincial/eliminar/${depPro.idDepProv}?_method=DELETE`, method="post")
-                            input.btn.btn-danger(type="submit", value="Borrar")
+                        if rol == "Administrador"
+                            form(action=`/depositoProvincial/editar/${depPro.idDepProv}`, method="get")
+                                input.btn.btn-primary(type="submit", value="Editar")
+                            input.btn.btn-danger(type="button" onclick=`eliminarDepoProv(${depPro.idDepProv},this)` value="Eliminar")
+                        else 
+                            form(action=`/depositoProvincial/stock/${depPro.idDepProv}`, method="get")
+                                input.btn.btn-success(type="submit", value="Stock")

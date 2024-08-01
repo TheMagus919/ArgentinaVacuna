@@ -1,0 +1,38 @@
+extends ../layout.pug
+
+block content
+    .contenedorVolverCrear
+        a.link(href="/traslado")
+            | Volver Atrás
+            img(src='/images/volver.png', alt="Flecha hacia atrás")
+    h2 TRASLADOS EN PROCESO:
+    table.table#tabla
+        thead
+            tr
+                th ID
+                th CENTRO DE VACUNACION ENVIA
+                th LOTE PROVEEDOR
+                th CENTRO RECIBE
+                th CANTIDAD VACUNAS
+                th FECHA SALIDA
+                th FECHA LLEGADA
+                th OPCIONES
+
+        tbody
+            each tras in ListaTraslados
+                tr
+                    td= tras.idTraslado
+                    td= tras.centroEnvia.idCentro+" - "+tras.centroEnvia.nombre
+                    td= tras.LoteProveedor.nroLote+" - "+tras.LoteProveedor.nombreComercial
+                    td= tras.centroRecibe.idCentro+" - "+tras.centroRecibe.nombre
+                    td= tras.cantidadDeVacunas
+                    td= tras.fechaSalida
+                    if tras.fechaLlegada == null 
+                        td= "En Proceso"
+                    else 
+                        td= tras.fechaLlegada
+                    td(style="display: flex;")
+                        form(action=`/traslado/consultar/${tras.idTraslado}`, method="get")
+                            input.btn.btn-primary(type="submit", value="Consultar")
+                        form(action=`/traslado/ingreso/${tras.idTraslado}`, method="get")
+                            input.btn.btn-secondary(type="submit", value="Registrar ingreso")

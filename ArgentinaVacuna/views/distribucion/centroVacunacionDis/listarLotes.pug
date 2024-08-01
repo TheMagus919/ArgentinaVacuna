@@ -6,11 +6,11 @@ block content
             | Volver Atrás
             img(src='/images/volver.png', alt="Flecha hacia atrás")
     h2 Listado de Lotes.
-    P Selecciona el Lote que sera trasladado al Centro de Vacunacion.
+    P Selecciona el Lote para Distribuirlo al Centro de Vacunacion.
     table.table#tabla
         thead
             tr
-                th ID LOTE PROVEEDOR
+                th NUMERO DE LOTE
                 th NOMBRE COMERCIAL
                 th TIPO VACUNA
                 th CANTIDAD DE VACUNAS
@@ -18,10 +18,10 @@ block content
         tbody
             each lote in listaDeLotes
                 tr
-                    td= lote.nroLote
+                    td= lote.LoteProveedor.nroLote
                     td= lote.LoteProveedor.nombreComercial
                     td= lote.LoteProveedor.TipoVacuna.nombre
-                    td= lote.cantidadDeVacunas
+                    td= lote.get('cantidadTotalVacunas')
                     td 
-                        form(action=`/distribucion/distribucionCentroVac/crear/${lote.idDepProv}${lote.nroLote}`, method="get")
+                        form(action=`/distribucion/distribucionCentroVac/crear/${lote.DepositoProvincial.idDepProv}/${lote.LoteProveedor.nroLote}`, method="get")
                             input.btn.btn-primary(type="submit", value="Seleccionar")

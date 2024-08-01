@@ -1,32 +1,62 @@
 extends ../layout.pug
 
 block content
-    .contenedorVolverCrear
-        a.link(href="/")
-            | Volver Atrás
-            img(src='/images/volver.png', alt="Flecha hacia atrás")
-        h5
-            form(action=`/depositoNacional/crear`, method="get")
-                input(type="submit", value="Añadir Nuevo Deposito Nacional")
-    table.table#tabla
-        thead
-            tr
-                th ID
-                th NOMBRE
-                th PROVINCIA
-                th LOCALIDAD
-                th DIRECCION
-                th OPCIONES
-        tbody
-            each depNac in listaDeDepositosNacionales
+    if rol == "Administrador"
+        .contenedorVolverCrear
+            a.link(href="/")
+                | Volver Atrás
+                img(src='/images/volver.png', alt="Flecha hacia atrás")
+        h4(style="margin:20px;") LISTA DE DEPOSITOS NACIONALES
+        table.table#tabla
+            thead
                 tr
-                    td= depNac.idDepNac
-                    td= depNac.nombre
-                    td= depNac.provincia
-                    td= depNac.localidad
-                    td= depNac.direccion
-                    td(style="display: flex;")
-                        form(action=`/depositoNacional/editar/${depNac.idDepNac}`, method="get")
-                            input.btn.btn-primary(type="submit", value="Editar")
-                        form(action=`/depositoNacional/eliminar/${depNac.idDepNac}?_method=DELETE`, method="post")
-                            input.btn.btn-danger(type="submit", value="Borrar")
+                    th NOMBRE
+                    th PROVINCIA
+                    th LOCALIDAD
+                    th DIRECCION
+                    th OPCIONES
+            tbody
+                each depo in depositoNacional 
+                    tr
+                        td= depo.nombre
+                        td= depo.provincia
+                        td= depo.localidad
+                        td= depo.direccion
+                        td(style="display: flex;")
+                            form(action=`/depositoNacional/editar/${depo.idDepNac}`, method="get")
+                                    input.btn.btn-primary(type="submit", value="Editar")
+    else 
+        .contenedorVolverCrear
+            a.link(href="/")
+                | Volver Atrás
+                img(src='/images/volver.png', alt="Flecha hacia atrás")
+        .listadoxfecha
+            form.form(action=`/depositoNacional/vacunasCompradas`, method="post")
+                .row.justify-content-start
+                    .col-md-6(style="display: flex; align-items: center;justify-content: center;")
+                        p Listar vacunas compradas por rango de fechas:
+                    .col-md-2
+                        .form-group
+                            label(for="fechaInicio") Fecha inicio:
+                            input.form-control(type="date" name="fechaInicio" id="fechaInicio")
+                    .col-md-2
+                        .form-group
+                            label(for="fechaFin") Fecha fin:
+                            input.form-control(type="date" name="fechaFin" id="fechaFin")
+                    .col-md-2
+                        .form-group
+                            label(for="")
+                            input.form-control.btn.btn-primary(type="submit", value="Listar")
+        .consulta
+            h1 DEPOSITO NACIONAL:
+            .contenido
+                h4(style="text-align: center;") INFORMACION:
+                ul 
+                    li NOMBRE: #{depositoNacional.nombre}:
+                    li PROVINCIA: #{depositoNacional.provincia}
+                    li LOCALIDAD: #{depositoNacional.localidad}
+                    li DIRECCION: #{depositoNacional.direccion}
+                    li(style="list-style: none; display: flex; justify-content: flex-end; margin-top:5px;") 
+                        form(action=`/depositoNacional/stock/${depositoNacional.idDepNac}`, method="get")
+                            input.btn.btn-primary(type="submit", value="Consultar Stock")
+                        

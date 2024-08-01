@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       CentroDeVacunacion.belongsToMany(models.LoteProveedor,  { through:'DistribucionCentro', foreignKey: 'idCentro'});
       CentroDeVacunacion.hasMany(models.Traslado, { as: 'trasladosEnviados', foreignKey: 'idCentroEnvia' });
       CentroDeVacunacion.hasMany(models.Traslado, { as: 'trasladosRecibidos', foreignKey: 'idCentroRecibe' });
+      CentroDeVacunacion.hasMany(models.Trabaja, { foreignKey: 'idCentro' });
     }
   }
   CentroDeVacunacion.init({

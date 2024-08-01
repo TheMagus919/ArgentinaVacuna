@@ -28,9 +28,9 @@ block content
                                     option(value=`${cen.idCentro}` selected=`${cen.idCentro}`===`${distri.idCentro}`) #{cen.idCentro}  - #{cen.nombre}
                         .form-group
                             label(for="fechaDeSalidaDepProv") FECHA DE SALIDA:
-                            input.form-control(type="date" name="fechaDeSalidaDepProv" id="fechaDeSalidaDepProv" value=`${distri.fechaDeSalidaDepProv}` required)
+                            input.form-control(type="date" name="fechaDeSalidaDepProv" id="fechaDeSalidaDepProv" min=`${cantidad.fechaLlegadaDepProv}` max=`${distri.LoteProveedor.fechaDeVencimiento}` value=`${distri.fechaDeSalidaDepProv}` readonly)
                         .form-group
                             label(for="fechaLlegadaCentro") FECHA DE LLEGADA:
-                            input.form-control(type="date" name="fechaLlegadaCentro" id="fechaLlegadaCentro" value=`${distri.fechaLlegadaCentro}` required)
+                            input.form-control(type="date" name="fechaLlegadaCentro" id="fechaLlegadaCentro" min=`${distri.fechaDeSalidaDepProv}` max=`${distri.LoteProveedor.fechaDeVencimiento}` value=`${distri.fechaLlegadaCentro}` )
                         .form-group
                             input.form-control.btn.btn-light(type="submit", value="Guardar")

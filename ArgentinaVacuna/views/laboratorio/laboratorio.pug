@@ -1,0 +1,52 @@
+extends ../layout.pug
+
+block content
+    if rol == "Administrador"
+        .contenedorVolverCrear
+            a.link(href="/")
+                | Volver Atrás
+                img(src='/images/volver.png', alt="Flecha hacia atrás")
+            h5
+                form(action=`/laboratorio/crear`, method="get")
+                    input(type="submit", value="Añadir Laboratorio")
+        h4(style="margin:20px;") LISTA DE LABORATORIOS
+        table.table#tabla
+            thead
+                tr
+                    th NOMBRE
+                    th PAIS
+                    th PROVINCIA
+                    th DIRECCION
+                    th OPCIONES
+            tbody
+                each laboratorio in listLaboratorios
+                    tr
+                        td= laboratorio.nombre
+                        td= laboratorio.pais
+                        td= laboratorio.provincia
+                        td= laboratorio.direccion
+                        td(style="display: flex;")
+                            form(action=`/laboratorio/editar/${laboratorio.idLab}`, method="get")
+                                input.btn.btn-primary(type="submit", value="Editar")
+                            input.btn.btn-danger(type="button" onclick=`eliminarLab(${laboratorio.idLab},this)` value="Eliminar")
+    else 
+        .contenedorVolverCrear
+            a.link(href="/")
+                | Volver Atrás
+                img(src='/images/volver.png', alt="Flecha hacia atrás")
+        .consulta
+            h2(style="margin:20px;") LABORATORIO:
+            each laboratorio in listLaboratorios
+                .contenido
+                    h4(style="text-align: center;") INFORMACION:
+                    ul 
+                        li NOMBRE: #{laboratorio.nombre}
+                        li PAIS: #{laboratorio.pais}
+                        li PROVINCIA: #{laboratorio.provincia}
+                        li DIRECCION: #{laboratorio.direccion}
+                        li(style="list-style: none; display: flex; justify-content: flex-end; margin-top:5px;")
+                                form(action=`/laboratorio/stock/${laboratorio.idLab}`, method="get")
+                                    input.btn.btn-primary(type="submit", value="Consultar Stock")
+                                form(action=`/laboratorio/agregar/${laboratorio.idLab}`, method="get")
+                                    input.btn.btn-primary(type="submit", value="Agregar Lote")
+                        

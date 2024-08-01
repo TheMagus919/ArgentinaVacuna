@@ -6,7 +6,7 @@ const mysql = require('mysql2');
 
 exports.listar = async function (req, res){
     TipoVacuna.findAll().then((tip)=> {
-        res.render("tipoVacuna/ListarTiposDeVacunas",{title:"Tipo de Vacuna", listaDeTipos:tip});
+        res.render("tipoVacuna/ListarTiposDeVacunas",{title:"Tipo de Vacuna", rol:req.session.rol, name:req.session.nombre, mail:req.session.mail, listaDeTipos:tip});
     })
     .catch((err) => res.render("error", {error:err}));
 };
@@ -17,7 +17,7 @@ exports.editTipo= function (req, res){
         if(tip == null){
             res.render("error", {message:"Not Found",error:{status:404,stack:"No se encontro ningun Tipo de Vacuna con esa informacion."}});
         }
-        res.render("tipoVacuna/editar",{title:"Tipo de Vacuna", tip:tip});
+        res.render("tipoVacuna/editar",{title:"Tipo de Vacuna", rol:req.session.rol, name:req.session.nombre, mail:req.session.mail, tip:tip});
         }
     )
     .catch((err) => res.render("error", {error:err}));
@@ -42,7 +42,7 @@ exports.putTipo =async function (req, res){
 };
 
 exports.crear = function (req, res){
-    res.render("tipoVacuna/crear",{title:"Tipo de Vacuna"});
+    res.render("tipoVacuna/crear",{title:"Tipo de Vacuna", name:req.session.nombre, mail:req.session.mail, rol:req.session.rol});
 };
 
 exports.alta = function (req, res){
@@ -68,7 +68,7 @@ exports.eliminar = function (req, res){
             res.render("error", {message:"Not Found",error:{status:404,stack:"No se encontro ningun Tipo de Vacuna con esa informacion."}});
         }
         result.destroy();
-        res.redirect("/tipoVacuna");
+        res.status(200).json({ message: 'Registro borrado exitosamente.' });
     })
     .catch((err) => res.render("error", {error:err}));
 };

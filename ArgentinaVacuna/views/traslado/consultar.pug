@@ -36,5 +36,11 @@ block content
                 li DIRECCION: #{traslado.centroRecibe.direccion}
         .contenido 
             h4 CANTIDAD DE VACUNAS QUE SE ENVIAN: #{traslado.cantidadDeVacunas}
-            h4 FECHA DE SALIDA: #{traslado.fechaSalida}
-            h4 FECHA DE LLEGADA: #{traslado.fechaLlegada}
+            if traslado.fechaSalida == null 
+                h4 FECHA DE SALIDA: En Proceso
+            else 
+                h4 FECHA DE SALIDA: #{traslado.fechaSalida}
+            if traslado.fechaLlegada == null 
+                h4 FECHA DE LLEGADA: En Proceso
+            else 
+                h4 FECHA DE LLEGADA: #{traslado.fechaLlegada}

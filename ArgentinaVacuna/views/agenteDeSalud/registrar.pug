@@ -1,0 +1,84 @@
+extends ../layout.pug
+
+block content
+    .contenedorVolverCrear
+        a.link(href="/auth/login")
+            | Iniciar Sesión
+            img(src='/images/volver.png', alt="Flecha hacia atrás")
+    .formulario
+        h1.text-center Registrarse
+        .container
+            form.form(action="/auth/registrarse" id="registro" method="post")
+                .row.justify-content-between
+                    .col-md-5
+                        .form-group
+                            label(for="dniAgente") DNI:
+                            input.form-control(type="number" name="dniAgente" id="dniAgente" placeholder="Ingresar DNI" required)
+                        .form-group
+                            label(for="nombre") NOMBRE:
+                            input.form-control(type="text" name="nombre" id="nombre" placeholder="Ingresar Nombre" required)
+                        .form-group
+                            label(for="apellido") APELLIDO:
+                            input.form-control(type="text" name="apellido" id="apellido" placeholder="Ingresar Apellido" required)
+                        .form-group
+                            label(for="fechaDeNacimiento") FECHA DE NACIMIENTO:
+                            input.form-control(type="date" name="fechaDeNacimiento" id="fechaDeNacimiento" required)
+                        .form-group
+                            label(for="genero") GENERO:
+                            select.form-control(name="genero" id="genero" required)
+                                option(value="masculino") Masculino
+                                option(value="femenino") Femenino
+                        .form-group
+                            label(for="mail") CORREO ELECTRONICO:
+                            input.form-control(type="email" name="mail" id="mail" placeholder="Ingresar Correo Electronico" required)
+                    .col-md-5
+                        .form-group
+                            label(for="matricula") MATRICULA:
+                            input.form-control(type="text" name="matricula" id="matricula" placeholder="Ingresar Matricula Ej: MA-40230" required)
+                        .form-group
+                            label(for="password") CONTRASEÑA:
+                            input.form-control(type="password" name="password" id="password" placeholder="Ingresar Contraseña" required)
+                        .form-group
+                            label(for="rol") OCUPACION:
+                            select.form-control(name="rol" id="rolRegistro" required)
+                                option(value="Deposito Nacional") Deposito Nacional
+                                option(value="Deposito Provincial") Deposito Provincial
+                                option(value="Deposito Centro Vacunacion") Deposito Centro Vacunacion
+                                option(value="Laboratorio") Laboratorio
+                                option(value="Medico") Medico
+                        .form-group
+                            label(for="pais") PAIS:
+                            input.form-control(type="text" name="pais" id="pais" placeholder="Ingresar Pais" required)
+                        .form-group(id="provGroup" hidden) 
+                            label(for="provincia") PROVINCIA:
+                            select.form-control(name="provincia" id="provinciaRegistro" hidden disabled)
+                                option(value="Buenos Aires") Buenos Aires
+                                option(value="Catamarca") Catamarca
+                                option(value="Chaco") Chaco
+                                option(value="Chubut") Chubut
+                                option(value="Córdoba") Córdoba
+                                option(value="Corrientes") Corrientes
+                                option(value="Entre Ríos") Entre Ríos
+                                option(value="Formosa") Formosa
+                                option(value="Jujuy") Jujuy
+                                option(value="La Pampa") La Pampa
+                                option(value="La Rioja") La Rioja
+                                option(value="Mendoza") Mendoza
+                                option(value="Misiones") Misiones
+                                option(value="Neuquén") Neuquén
+                                option(value="Río Negro") Río Negro
+                                option(value="Salta") Salta
+                                option(value="San Juan") San Juan
+                                option(value="San Luis") San Luis
+                                option(value="Santa Cruz") Santa Cruz
+                                option(value="Santa Fe") Santa Fe
+                                option(value="Santiago del Estero") Santiago del Estero
+                                option(value="Tierra del Fuego") Tierra del Fuego
+                                option(value="Tucumán") Tucumán
+                            input.form-control(type="text" name="provincia" id="provinciaRegistro2" placeholder="Ingresar la Provincia." hidden disabled)
+                        .form-group(id="trabaja" hidden) 
+                            label(for="trabajaRegistro") LUGAR DE TRABAJO:
+                            select.form-control(name="trabajaRegistro" id="trabajaRegistro")
+                        .form-group
+                            label(for="")
+                            input.form-control.btn.btn-light(type="submit", value="Guardar")

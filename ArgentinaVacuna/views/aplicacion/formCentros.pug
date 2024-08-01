@@ -15,6 +15,6 @@ block content
                             label(for="idCentro") CENTRO DE VACUNACION:
                             select.form-control(name="idCentro" id="idCentro" required)
                                 each centro in listaCentros
-                                    option(value=`${centro.idCentro}`) #{centro.idCentro} - #{centro.CentroDeVacunacion.nombre}
+                                    option(value=`${centro.idCentro}`) #{centro.idCentro} - #{centro.nombre}
                         .form-group
-                            input.form-control.btn.btn-light(type="submit", value="Guardar")
+                            input.form-control.btn.btn-light(type="submit", value="Seleccionar")

@@ -2,6 +2,7 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
+var session = require('express-session');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
@@ -15,6 +16,7 @@ var centroDeVacunacionRoutes = require('./routes/centroDeVacunacionRoutes')
 var aplicacionRoutes = require('./routes/aplicacionRoutes')
 var tipoVacunaRoutes = require('./routes/tipoVacunaRoutes');
 var descarteRoutes = require('./routes/descarteRoutes')
+var authRoutes = require('./routes/authRoutes');
 
 var trasladoRoutes = require('./routes/trasladoRoutes')
 var distribucionRoutes = require('./routes/distribucionRoutes')
@@ -23,6 +25,14 @@ const override = require("method-override");
 
 var app = express();
 app.use(override("_method"));
+app.use(session({
+  secret:'BOCAJUNIORS',
+  resave:false,
+  saveUninitialized:false,
+  cookie:{
+          maxAge:12*60*60*1000
+  }
+}))
 
 const { request } = require('http');
 // view engine setup
@@ -38,6 +48,7 @@ app.use(express.static("public"));
 
 
 app.use('/', indexRouter);
+app.use('/auth', authRoutes);
 app.use('/laboratorio', laboratorioRoutes);
 app.use('/loteProveedor', loteProveedorRoutes);
 app.use('/paciente', pacienteRoutes);

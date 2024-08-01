@@ -5,19 +5,22 @@ block content
         a.link(href="./")
             | Volver Atrás
             img(src='/images/volver.png', alt="Flecha hacia atrás")
+    h4 LISTADO DE VACUNAS VENCIDAS Y DONDE SE ENCUENTRAN:
     table.table#tabla
         thead
             tr
                 th NUMERO DE LOTE
                 th CANTIDAD DE VACUNAS
                 th TIPO DE VACUNA
-                th EN DEPOSITO PROVINCIAL
-                th EN CENTRO DE VACUNACION
+                th DEPOSITO NACIONAL
+                th DEPOSITO PROVINCIAL
+                th CENTRO DE VACUNACION
         tbody
             each lista in listaVacunasVencidas
                 tr
                     td= lista.nroLote
                     td= lista.vencidas
                     td= lista.tipoVacuna
+                    td= lista.enNacion
                     td= lista.enProvincia
                     td= lista.enCentro

@@ -9,14 +9,13 @@ block content
             form(action=`/aplicacion/crear`, method="get")
                 input(type="submit", value="Añadir Nuevo Registro de Aplicacion")
     a.linkopcion(href="/aplicacion/listaPacientes") Listar cantidad de pacientes vacunados
-    a.linkopcion(href="/aplicacion/listaVencidasAplicadas") Listado de personas que se le aplico Vacunas Vencidas
+    //a.linkopcion(href="/aplicacion/listaVencidasAplicadas") Listado de personas que se le aplico Vacunas Vencidas
+    a.linkopcion(href="/aplicacion/stockDisponible") Stock Disponible
     table.table#tabla
         thead
             tr
                 th ID
                 th NOMBRE DE PACIENTE
-                th DNI
-                th NOMBRE DE AGENTE
                 th DNI
                 th NOMBRE VACUNA
                 th TIPO DE VACUNA
@@ -29,15 +28,12 @@ block content
                     td= ap.idAplicacion
                     td= ap.Paciente.nombre+ " " +ap.Paciente.apellido
                     td= ap.Paciente.dniPaciente
-                    td= ap.AgenteDeSalud.nombre+ " " +ap.AgenteDeSalud.apellido
-                    td= ap.dniAgente
                     td= ap.LoteProveedor.nombreComercial
                     td= ap.LoteProveedor.TipoVacuna.nombre
                     td= ap.fechaDeAplicacion
                     td= ap.CentroDeVacunacion.nombre
                     td(style="display: flex;")
-                        form(action=`/aplicacion/editar/${ap.idAplicacion}`, method="get")
-                            input.btn.btn-primary(type="submit", value="Editar")
-                        form(action=`/aplicacion/eliminar/${ap.idAplicacion}?_method=DELETE`, method="post")
-                            input.btn.btn-danger(type="submit", value="Borrar")
+                        form(action=`/aplicacion/consultar/${ap.idAplicacion}`, method="get")
+                            input.btn.btn-primary(type="submit", value="Consultar")
+                        input.btn.btn-danger(type="button" onclick=`eliminarRegistroAplicacion(${ap.idAplicacion},this)` value="Eliminar")
 

@@ -26,10 +26,10 @@ block content
                             select.form-control(name="tipoDeFrasco" id="tipoDeFrasco" required)
                                 option(value="Monodosis" selected="Monodosis"===`${lote.tipoDeFrasco}`) Monodosis
                                 option(value="Multidosis" selected="Multidosis"===`${lote.tipoDeFrasco}`) Multidosis
+                    .col-md-5
                         .form-group
                             label(for="cantidadDeVacunas") CANTIDAD DE VACUNAS:
                             input.form-control(type="number" name="cantidadDeVacunas" id="cantidadDeVacunas" value=`${lote.cantidadDeVacunas}` required)
-                    .col-md-5
                         .form-group
                             label(for="fechaDeFabricacion") FECHA DE FABRICACION:
                             input.form-control(type="date" name="fechaDeFabricacion" id="fechaDeFabricacion" value=`${lote.fechaDeFabricacion}` required)
@@ -37,7 +37,5 @@ block content
                             label(for="fechaDeVencimiento") FECHA DE VENCIMIENTO:
                             input.form-control(type="date" name="fechaDeVencimiento" id="fechaDeVencimiento" value=`${lote.fechaDeVencimiento}` required)
                         .form-group
-                            label(for="fechaDeCompra") FECHA DE COMPRA:
-                            input.form-control(type="date" name="fechaDeCompra" id="fechaDeCompra" value=`${lote.fechaDeCompra}` required)
-                        .form-group
+                            label(for="")
                             input.form-control.btn.btn-light(type="submit", value="Guardar")

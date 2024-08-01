@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       AgenteDeSalud.hasMany(models.Aplicacion, { foreignKey:'dniAgente'})
       AgenteDeSalud.belongsToMany(models.CentroDeVacunacion, { through:'Aplicacion', foreignKey:'dniAgente'})
+      AgenteDeSalud.hasMany(models.Trabaja, { foreignKey: 'dniAgente' });
     }
   }
   AgenteDeSalud.init({
@@ -40,10 +41,26 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    pais:{
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    provincia:{
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
     matricula: {
         type: DataTypes.STRING,
         allowNull: false,
       },
+    password:{
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    rol:{
+        type: DataTypes.STRING,
+        allowNull: false,
+    }
   },
   {
     sequelize,

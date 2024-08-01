@@ -1,0 +1,24 @@
+extends ../layout.pug
+
+block content
+    .contenedorVolverCrear
+        form.form(action=`/depositoNacional/vacunasCompradas`, method="post")
+            input(type="date" name="fechaInicio" id="fechaInicio" value=`${fechaInicio}` hidden)
+            input(type="date" name="fechaFin" id="fechaFin" value=`${fechaFin}` hidden)
+            input.form-control.btn.btn-primary(type="submit", value="Volver atras")
+    .consulta
+        h1 Registro De Lotes comprados en #{nombre}:
+        if lotes.length === 0 
+            .contenido
+                h4 No hay Lotes.
+        else 
+            each lote in lotes 
+                .contenido
+                    h4 LOTE PROVEEDOR NRO° #{lote.nroLote}:
+                    ol 
+                        li NOMBRE COMERCIAL: #{lote.LoteProveedor.nombreComercial}
+                        li CANTIDAD DE VACUNAS QUE CONTIENE: #{lote.cantidadDeVacunas}
+                        li TIPO DE FRASCO: #{lote.LoteProveedor.tipoDeFrasco}
+                        li TIPO DE VACUNA: #{lote.LoteProveedor.TipoVacuna.nombre}
+                        li FECHA FABRICACION: #{lote.LoteProveedor.fechaDeFabricacion}
+                        li FECHA VENCIMIENTO: #{lote.LoteProveedor.fechaDeVencimiento}

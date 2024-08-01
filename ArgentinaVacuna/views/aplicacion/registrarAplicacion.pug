@@ -9,23 +9,21 @@ block content
         h1.text-center AÑADIR NUEVO REGISTRO DE APLICACION
         .container
             form.form(action="alta" method="post")
-                .row.justify-content-between
-                    .col-md-6
+                .row.justify-content-around
+                    .col-md-4
                         .form-group
                             label(for="dniPaciente") PACIENTE:
-                            select.form-control(name="dniPaciente" id="dniPaciente" required)
-                                each pac in listPacientes
-                                    option(value=`${pac.dniPaciente}`) #{pac.nombre} #{pac.apellido} - #{pac.dniPaciente}
+                            .add.justify-content-between  
+                                input(type="text" name="dniPaciente" id="dniPaciente" required)
+                                a.link(href="/aplicacion/crear/paciente" style='color: white; font-family: system-ui; font-weight: bold;') +ADD
                         .form-group
                             label(for="dniAgente") AGENTE DE SALUD:
-                            select.form-control(name="dniAgente" id="dniAgente" required)
-                                each ag in listAgentes
-                                    option(value=`${ag.dniAgente}`) #{ag.nombre} #{ag.apellido} - #{ag.dniAgente}
+                            input.form-control(type="text" name="dniAgente" id="dniAgente" value=`${agente.nombre} ${agente.apellido} - ${agente.dniAgente}` readonly)
                         .form-group
                             label(for="nroLote") NUMERO DE LOTE PROVEEDOR:
                             select.form-control(name="nroLote" id="nroLote" required)
                                 each lote in listaLote
-                                    option(value=`${lote.nroLote}`) #{lote.nroLote} - #{lote.LoteProveedor.nombreComercial}
+                                    option(value=`${lote.nroLote}`) #{lote.nroLote} - #{lote.nombreComercial}
                     .col-md-5
                         .form-group
                             label(for="fechaDeAplicacion") FECHA DE APLICACION:
@@ -34,4 +32,5 @@ block content
                             label(for="idCentro") CENTRO DE VACUNACION:
                             input.form-control(type="text" name="idCentro" id="idCentro" value=`${centro.idCentro} - ${centro.nombre}` readonly)
                         .form-group
+                            label(for="")
                             input.form-control.btn.btn-light(type="submit", value="Guardar")

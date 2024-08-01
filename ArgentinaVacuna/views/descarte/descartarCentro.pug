@@ -1,0 +1,52 @@
+extends ../layout.pug
+
+block content
+    .contenedorVolverCrear
+        a.link(href="/")
+            | Volver Atrás
+            img(src='/images/volver.png', alt="Flecha hacia atrás")
+    .formulario
+        h1.text-center REALIZAR DESCARTE
+        .container
+            form.form(id="descarteForm" action="alta" method="post")
+                .row.justify-content-between
+                    .col-md-6
+                        .form-group
+                            label(for="dniAgente") DNI AGENTE RESPONSABLE:
+                            input.form-control(type="number" name="dniAgente" id="dniAgente" value=`${agente.dniAgente}` readOnly)
+                        .form-group
+                            label(for="idCentro") CENTRO DE VACUNACION:
+                            select.form-control(name="idCentro" id="idCentro" onchange=`llenarLoteCentro()` required)
+                                each centro in centros
+                                    option(value=`${centro.idCentro}`) #{centro.idCentro} - #{centro.nombre}
+                        .form-group(id="lotes" hidden)
+                            label(for="nroLote") NRO LOTE, NOMBRE Y VACUNAS:
+                            select.form-control(name="nroLote" id="nroLote" required)
+                    .col-md-6
+                        .form-group
+                            label(for="formaDescarte") FORMA DE DESCARTE:
+                            input.form-control(type="text" name="formaDescarte" id="formaDescarte" placeholder="Ingresar la Forma en que se Descartara" required)
+                        .form-group
+                            label(for="empresaResponsable") EMPRESA RESPONSABLE:
+                            input.form-control(type="text" name="empresaResponsable" id="empresaResponsable" placeholder="Ingresar Empresa Responsable" required)
+                        .form-group
+                            label(for="motivo") MOTIVO
+                            input.form-control(type="text" name="motivo" id="motivo" placeholder="Ingresar Motivo" required)
+                        .form-group
+                            label(for="")
+                            input.form-control.btn.btn-light(type="submit", value="Guardar")
+    script.
+        document.getElementById('descarteForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const confirmacion = confirm('¿Estás seguro de que quieres realizar este Descarte?');
+
+            if (confirmacion) {
+                this.submit();
+            }
+        });
+        const select = document.getElementById('idCentro');
+
+        if (select.options.length === 1) {
+            llenarLoteCentro()
+        }

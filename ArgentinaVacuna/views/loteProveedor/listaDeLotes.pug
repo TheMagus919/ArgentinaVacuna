@@ -5,6 +5,7 @@ block content
         a.link(href="./")
             | Volver Atrás
             img(src='/images/volver.png', alt="Flecha hacia atrás")
+    h4 REGISTRO DE DISTRIBUCION DE LOTES POR TIPO DE VACUNA:
     table.table#tabla
         thead
             tr
@@ -15,6 +16,7 @@ block content
                 th APLICADAS
                 th DESCARTADAS
                 th VENCIDAS
+                th OPCIONES
         tbody
             each lote in listaLotes
                 tr
@@ -25,3 +27,8 @@ block content
                     td= lote.aplicadas
                     td= lote.descartadas
                     td= lote.vencidas
+                    td(style="display: flex;")
+                        form(action=`/loteProveedor/listar/consultar`, method="post")
+                            label(for="nombre")
+                            input.form-control(type="text" name="nombre" id="nombre" value=`${lote.nombre}` hidden)
+                            input.btn.btn-primary(type="submit", value="Consultar")

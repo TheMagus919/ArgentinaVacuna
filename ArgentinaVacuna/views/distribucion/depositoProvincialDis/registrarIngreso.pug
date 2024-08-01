@@ -1,0 +1,35 @@
+extends ../../layout.pug
+
+block content
+    .contenedorVolverCrear
+        a.link(href="../")
+            | Volver Atrás
+            img(src='/images/volver.png', alt="Flecha hacia atrás")
+    .formulario
+        h1.text-center REGISTRAR INGRESO DE VACUNAS ID #{ingreso.idDisDep}:
+        .container
+            form.form(action=`/distribucion/distribucionDepoPro/ingreso/${ingreso.idDisDep}?_method=PUT` method="post")
+                .row.justify-content-evenly
+                    .col-md-5
+                        .form-group
+                            label(for="nroLote") LOTE:
+                            input.form-control(type="text" name="nroLote" id="nroLote" value=`${ingreso.nroLote} - ${ingreso.LoteProveedor.nombreComercial}` readonly)
+                        .form-group
+                            label(for="idDepNac") DEPOSITO NACIONAL:
+                            input.form-control(type="text" name="idDepNac" id="idDepNac" value=`${ingreso.idDepNac} - ${ingreso.DepositoNacional.nombre}` readonly)
+                        .form-group
+                            label(for="cantidadDeVacunas") CANTIDAD DE VACUNAS:
+                            input.form-control(type="number" name="cantidadDeVacunas" id="cantidadDeVacunas" value=`${ingreso.cantidadDeVacunas}` readonly)
+                    .col-md-4
+                        .form-group
+                            label(for="idDepProv") DEPOSITO PROVINCIAL:
+                            input.form-control(type="text" name="idDepProv" id="idDepProv" value=`${ingreso.idDepProv} - ${ingreso.DepositoProvincial.nombre}` readonly)
+                        .form-group
+                            label(for="fechaDeSalidaDepNac") FECHA DE SALIDA:
+                            input.form-control(type="date" name="fechaDeSalidaDepNac" id="fechaDeSalidaDepNac" value=`${ingreso.fechaDeSalidaDepNac}` readonly)
+                        .form-group
+                            label(for="fechaLlegadaDepProv") FECHA DE SALIDA:
+                            input.form-control(type="date" name="fechaLlegadaDepProv" id="fechaLlegadaDepProv" min=`${ingreso.fechaDeSalidaDepNac}` max=`${ingreso.LoteProveedor.fechaDeVencimiento}` required)
+                        .form-group
+                            label(for="")
+                            input.form-control.btn.btn-light(type="submit", value="Guardar")

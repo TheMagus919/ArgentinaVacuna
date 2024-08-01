@@ -1,0 +1,31 @@
+extends ../../layout.pug
+
+block content
+    .contenedorVolverCrear
+        a.link(href="/distribucion/distribucionDepoPro")
+            | Volver Atrás
+            img(src='/images/volver.png', alt="Flecha hacia atrás")
+    h2 REGISTRO DE ENVIOS:
+    table.table#tabla
+        thead
+            tr
+                th DEPOSITO PROVINCIAL
+                th LOTE PROVEEDOR
+                th CENTRO DE VACUNACION
+                th CANTIDAD VACUNAS
+                th FECHA DE SALIDA
+                th FECHA DE LLEGADA
+                th OPCIONES
+
+        tbody
+            each envio in listaEnvios
+                tr
+                    td= envio.DepositoProvincial.idDepProv+" - "+envio.DepositoProvincial.nombre
+                    td= envio.LoteProveedor.nroLote+" - "+envio.LoteProveedor.nombreComercial
+                    td= envio.DistribucionCentroVac.idCentro+" - "+envio.DistribucionCentroVac.nombre
+                    td= envio.cantidadDeVacunas
+                    td= envio.fechaDeSalidaDepProv
+                    td= envio.fechaLlegadaCentro
+                    td(style="display: flex;")
+                        form(action=`/distribucion/distribucionDepoPro/consultarEnvio/${envio.idDisCentro}`, method="get")
+                                input.btn.btn-primary(type="submit", value="Consultar")

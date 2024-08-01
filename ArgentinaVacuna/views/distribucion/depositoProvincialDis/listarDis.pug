@@ -1,20 +1,38 @@
 extends ../../layout.pug
 
 block content
-    .contenedorVolverCrear
-        a.link(href="/distribucion")
-            | Volver Atrás
-            img(src='/images/volver.png', alt="Flecha hacia atrás")
-        h5
-            form(action=`/distribucion/distribucionDepoPro/depositos`, method="get")
-                input(type="submit", value="Añadir Registro Distribucion Deposito Provincial")
+    if rol == "Administrador"
+        .contenedorVolverCrear
+            a.link(href="/")
+                | Volver Atrás
+                img(src='/images/volver.png', alt="Flecha hacia atrás")
+        h4(style="margin:20px;") LISTA DE DISTRIBUCION A DEPOSITOS PROVINCIALES
+    else
+        .contenedorVolverCrear
+            a.link(href="/distribucion")
+                | Volver Atrás
+                img(src='/images/volver.png', alt="Flecha hacia atrás")
+            .formOpciones(style="display: flex;")
+                h5
+                    form(action=`/distribucion/distribucionDepoPro/lotes`, method="get")
+                        input(type="submit", value="Solicitar Vacunas")
+                h5
+                    form(action=`/distribucion/distribucionDepoPro/enviar`, method="get")
+                        input(type="submit", value="Enviar Vacunas a Centro de Vacunacion")
+        a.linkopcion(href="/distribucion/distribucionDepoPro/listaCompras" style="margin-right:10px;") Listar Vacunas que Ingresaran
+        a.linkopcion(href="/distribucion/distribucionDepoPro/distribucionesEnProceso" style="margin-right:10px;") Envios en Proceso
+        a.linkopcion(href="/distribucion/distribucionDepoPro/solicitudes" style="margin-right:10px;") Solicitudes Pendientes
+        a.linkopcion(href="/distribucion/distribucionDepoPro/listaSolicitudes" style="margin-right:10px;") Mis Solicitudes
+        a.linkopcion(href="/distribucion/distribucionDepoPro/registroEnvios" style="margin-right:10px;") Registro de Envios
+        a.linkopcion(href="/distribucion/distribucionDepoPro/registroDescartes" style="margin-right:10px;") Registro de Descartes
+        h4(style="margin:20px;") Listado de Distribuciones realizadas de Depositos Nacionales a Depositos Provinciales.
     table.table#tabla
         thead
             tr
                 th ID
-                th DEPOSITO NACIONAL QUE ENVIA
+                th DEPOSITO NACIONAL
                 th LOTE PROVEEDOR
-                th DEPOSITO PROVINCIAL QUE RECIBE
+                th DEPOSITO PROVINCIAL
                 th CANTIDAD VACUNAS
                 th FECHA SALIDA
                 th FECHA LLEGADA
@@ -28,18 +46,18 @@ block content
                     td= dis.DepositoProvincial.idDepProv+" - "+dis.DepositoProvincial.nombre
                     td= dis.cantidadDeVacunas
                     td= dis.fechaDeSalidaDepNac
-                    td= dis.fechaLlegadaDepProv
+                    if dis.fechaLlegadaDepProv == null 
+                        td En Proceso
+                    else
+                        td= dis.fechaLlegadaDepProv
                     td(style="display: flex;")
-                        if dis.LoteProveedor.vencidas
-                            form(action=`/distribucion/distribucionDepoPro/consultar/${dis.idDisDep}`, method="get")
-                                input.btn.btn-primary(type="submit", value="Consultar")
+                        if rol == "Administrador"
+                            form(action=`/distribucion/distribucionDepoPro/editar/${dis.idDisDep}`, method="get")
+                                input.btn.btn-primary(type="submit", value="Editar")
+                            input.btn.btn-danger(type="button" onclick=`eliminarRegistroDepProv(${dis.idDisDep},this)` value="Eliminar")
                         else
                             form(action=`/distribucion/distribucionDepoPro/consultar/${dis.idDisDep}`, method="get")
                                 input.btn.btn-primary(type="submit", value="Consultar")
-                            form(action=`/distribucion/distribucionDepoPro/editar/${dis.idDisDep}`, method="get")
-                                input.btn.btn-secondary(type="submit", value="Editar")
-                            form(action=`/distribucion/distribucionDepoPro/eliminar/${dis.idDisDep}?_method=DELETE`, method="post")
-                                input.btn.btn-danger(type="submit", value="Eliminar")
                                 
                             
                             

@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      DepositoNacional.belongsToMany(models.LoteProveedor, { through:'TrasladoDeposito', foreignKey: 'idDepNac'});
-      DepositoNacional.belongsToMany(models.DepositoProvincial, { through:'DistribucionDeposito', foreignKey: 'idDepNac'});
+      DepositoNacional.belongsToMany(models.LoteProveedor, { through: 'TrasladoDeposito', foreignKey: 'idDepNac' });
+      DepositoNacional.belongsToMany(models.DepositoProvincial, { through: 'DistribucionDeposito', foreignKey: 'idDepNac' });
       DepositoNacional.hasMany(models.TrasladoDeposito, { foreignKey: 'idDepNac' })
       DepositoNacional.hasMany(models.DistribucionDeposito, { foreignKey: 'idDepNac' })
     }
@@ -24,13 +24,14 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true,
     },
     nombre: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
     },
     provincia: {
       type: DataTypes.STRING,
-        allowNull: false,
+      allowNull: false,
+      unique: true
     },
     localidad: {
       type: DataTypes.STRING,
@@ -41,11 +42,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
   },
-  {
-    sequelize,
-    timestamps: false,
-    modelName: "DepositoNacional",
-    tableName: "depositoNacional",
-  });
+    {
+      sequelize,
+      timestamps: false,
+      modelName: "DepositoNacional",
+      tableName: "depositoNacional",
+    });
   return DepositoNacional;
 };

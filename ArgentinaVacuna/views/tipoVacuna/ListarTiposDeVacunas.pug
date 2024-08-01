@@ -66,6 +66,7 @@ html(lang="es")
             h5
                 form(action=`/tipoVacuna/crear`, method="get")
                     input(type="submit", value="Añadir Nuevo Tipo de Vacuna")
+        h4(style="margin:20px;") LISTA DE TIPOS DE VACUNAS
         table.table#tabla
             thead
                 tr
@@ -80,8 +81,7 @@ html(lang="es")
                         td(style="display: flex;")
                             form(action=`/tipoVacuna/editar/${tip.idTipoVacuna}`, method="get")
                                 input.btn.btn-primary(type="submit", value="Editar")
-                            form(action=`/tipoVacuna/eliminar/${tip.idTipoVacuna}?_method=DELETE`, method="post")
-                                input.btn.btn-danger(type="submit", value="Borrar")
+                            input.btn.btn-danger(type="button" onclick=`eliminarTipoVac(${tip.idTipoVacuna},this)` value="Eliminar")
     footer 
         p Esta pagina web tiene los derechos de autor reservados.
     

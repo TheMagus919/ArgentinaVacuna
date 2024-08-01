@@ -12,18 +12,13 @@ html(lang="es")
     script(src="https://code.jquery.com/jquery-3.6.1.min.js"
     integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
     crossorigin="anonymous" )
+    script(src="/javascripts/funciones.js") 
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous")
     script(src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js" defer)
     script(src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js" defer)
     script(defer).
       $(document).ready( function () {
       $('#tabla').DataTable({
-      columnDefs: [
-          {
-            targets: 3,
-            render: DataTable.render.datetime('DD-MM-YYYY'),
-            },
-        ],
         language: {
           lengthMenu: 'Mostrar _MENU_ registros por pagina.',
           zeroRecords: 'No se encontraron registros.',
@@ -39,25 +34,162 @@ html(lang="es")
       });
       });
   body
-    header
-      .containerr
-        h1
-          a(href="/") ARGENTINA VACUNA
-          img(src="/images/bandera.png")
-        nav.navegacion
-          ul.show
-            li
-              a(href='/aplicacion') APLICACION
-            li
-              a(href='/descarte/crear') DESCARTE
-            li
-              a(href='/distribucion') DISTRIBUCION
-            li
-              a(href='/loteProveedor') LOTE PROVEEDOR
-            li
-              a(href='/paciente') PACIENTE
-            li
-              a(href='/traslado') TRASLADO
+    if rol=="Deposito Nacional"
+      header
+        .containerr
+          .divisorLogo
+            h1
+              a(href="/") ARGENTINA VACUNA
+              img(src="/images/bandera.png")
+          .divisorOpciones
+            nav.navegacion
+              ul.show
+                li
+                  a(href='/depositoNacional') DEPOSITO NACIONAL
+                li
+                  a(href='/distribucion/distribucionDepoNac') DISTRIBUCION
+                li
+                  a(href='/descarte/nacion/crear') DESCARTAR
+            div.dropdown
+              a.btn.btn-light.dropdown-toggle(href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false") #{mail}
+              ul.dropdown-menu(aria-labelledby="dropdownMenuLink")
+                li 
+                  a.dropdown-item(href='/agenteDeSalud/perfil') Perfil
+                li 
+                  a.dropdown-item(href='/auth/cambiarPassword') Cambiar Contraseña
+                li
+                  a.dropdown-item(href='/auth/logout') Cerrar sesión
+    else if rol=="Deposito Provincial"
+      header
+        .containerr
+          .divisorLogo
+            h1
+              a(href="/") ARGENTINA VACUNA
+              img(src="/images/bandera.png")
+          .divisorOpciones
+            nav.navegacion
+              ul.show
+                li
+                  a(href='/depositoProvincial') DEPOSITOS PROVINCIALES
+                li
+                  a(href='/distribucion/distribucionDepoPro') DISTRIBUCION
+                li
+                  a(href='/descarte/provincia/crear') DESCARTAR
+            div.dropdown
+              a.btn.btn-light.dropdown-toggle(href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false") #{mail}
+              ul.dropdown-menu(aria-labelledby="dropdownMenuLink")
+                li 
+                  a.dropdown-item(href='/agenteDeSalud/perfil') Perfil
+                li 
+                  a.dropdown-item(href='/auth/cambiarPassword') Cambiar Contraseña
+                li
+                  a.dropdown-item(href='/auth/logout') Cerrar sesión
+    else if rol=="Deposito Centro Vacunacion"
+      header
+        .containerr
+          .divisorLogo
+            h1
+              a(href="/") ARGENTINA VACUNA
+              img(src="/images/bandera.png")
+          .divisorOpciones
+            nav.navegacion
+              ul.show
+                li
+                  a(href='/centroDeVacunacion') CENTROS DE VACUNACION
+                li
+                  a(href='/distribucion/distribucionCentroVac') DISTRIBUCION 
+                li
+                  a(href='/traslado') TRASLADOS
+                li
+                  a(href='/descarte/centroDeVacunacion/crear') DESCARTAR
+            div.dropdown
+              a.btn.btn-light.dropdown-toggle(href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false") #{mail}
+              ul.dropdown-menu(aria-labelledby="dropdownMenuLink")
+                li 
+                  a.dropdown-item(href='/agenteDeSalud/perfil') Perfil
+                li 
+                  a.dropdown-item(href='/auth/cambiarPassword') Cambiar Contraseña
+                li
+                  a.dropdown-item(href='/auth/logout') Cerrar sesión
+    else if rol=="Medico"
+      header
+        .containerr
+          .divisorLogo
+            h1
+              a(href="/") ARGENTINA VACUNA
+              img(src="/images/bandera.png")
+          .divisorOpciones
+            nav.navegacion
+              ul.show
+                li
+                  a(href='/aplicacion') APLICACION
+                li
+                  a(href='/paciente') PACIENTES
+            div.dropdown
+              a.btn.btn-light.dropdown-toggle(href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false") #{mail}
+              ul.dropdown-menu(aria-labelledby="dropdownMenuLink")
+                li 
+                  a.dropdown-item(href='/agenteDeSalud/perfil') Perfil
+                li 
+                  a.dropdown-item(href='/auth/cambiarPassword') Cambiar Contraseña
+                li
+                  a.dropdown-item(href='/auth/logout') Cerrar sesión
+    else if rol=="Laboratorio"
+      header
+        .containerr
+          .divisorLogo
+            h1
+              a(href="/") ARGENTINA VACUNA
+              img(src="/images/bandera.png")
+          .divisorOpciones
+            nav.navegacion
+              ul.show
+                li
+                  a(href='/laboratorio') LABORATORIO
+                li
+                  a(href='/loteProveedor') LOTE PROVEEDOR
+            div.dropdown
+              a.btn.btn-light.dropdown-toggle(href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false") #{mail}
+              ul.dropdown-menu(aria-labelledby="dropdownMenuLink")
+                li 
+                  a.dropdown-item(href='/agenteDeSalud/perfil') Perfil
+                li 
+                  a.dropdown-item(href='/auth/cambiarPassword') Cambiar Contraseña
+                li
+                  a.dropdown-item(href='/auth/logout') Cerrar sesión
+    else if rol=="Administrador"
+      header
+        .containerr
+          .divisorLogo
+            h1
+              a(href="/") ARGENTINA VACUNA
+              img(src="/images/bandera.png")
+          .divisorOpciones
+            nav.navegacion
+              ul.show
+                li
+                  a(href='/') INICIO
+                li
+                  a(href='/distribucion/distribucionDepoNac') DISTRIBUCION DEP NACIONAL
+                li
+                  a(href='/distribucion/distribucionDepoPro') DISTRIBUCION DEP PROVINCIAL
+                li
+                  a(href='/distribucion/distribucionCentroVac') DISTRIBUCION CENTRO
+            div.dropdown
+              a.btn.btn-light.dropdown-toggle(href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false") #{mail}
+              ul.dropdown-menu(aria-labelledby="dropdownMenuLink")
+                li 
+                  a.dropdown-item(href='/agenteDeSalud/perfil') Perfil
+                li 
+                  a.dropdown-item(href='/auth/cambiarPassword') Cambiar Contraseña
+                li
+                  a.dropdown-item(href='/auth/logout') Cerrar sesión
+    else if rol== null
+      header
+        .containerr
+          h1
+            a(href="/") ARGENTINA VACUNA
+            img(src="/images/bandera.png")
     main 
       block content
     footer 

@@ -6,7 +6,7 @@ block content
             | Volver Atrás
             img(src='/images/volver.png', alt="Flecha hacia atrás")
     .consulta
-        h1 DISTRIBUCION DEPOSITO NACIONAL ID: #{distri.idTrasladoDep}.
+        h1 INFORMACION DE DISTRIBUCION ID: #{distri.idTrasladoDep}.
         .contenido
             h4 LOTE PROVEEDOR:
             ol 
@@ -16,8 +16,10 @@ block content
                 li TIPO DE FRASCO: #{distri.LoteProveedor.tipoDeFrasco}
                 li TIPO DE VACUNA: #{distri.LoteProveedor.TipoVacuna.nombre}
                 li LABORATORIO: #{distri.LoteProveedor.Laboratorio.nombre}
-                li FECHA FABRICACION: #{distri.LoteProveedor.fechaDeFabricacion}
-                li FECHA VENCIMIENTO: #{distri.LoteProveedor.fechaDeVencimiento}
+                li FECHA DE FABRICACION: #{distri.LoteProveedor.fechaDeFabricacion}
+                li FECHA DE VENCIMIENTO: #{distri.LoteProveedor.fechaDeVencimiento}
+                if distri.LoteProveedor.vencidas
+                    li VENCIDAS: SI
         .contenido
             h4 DEPOSITO NACIONAL QUE RECIBE: 
             ol
@@ -27,5 +29,9 @@ block content
                 li LOCALIDAD: #{distri.DepositoNacional.localidad}
                 li DIRECCION: #{distri.DepositoNacional.direccion}
         .contenido
-            h4 CANTIDAD DE VACUNAS QUE SE ENVIAN: #{distri.cantidadDeVacunas}
-            h4 FECHA DE ADQUISICION: #{distri.fechaDeAdquisicion}
+            h5 CANTIDAD DE VACUNAS QUE SE ENVIAN: #{distri.cantidadDeVacunas}
+            h5 FECHA DE COMPRA: #{distri.fechaDeCompra}
+            if distri.fechaDeAdquisicion == null 
+                h5 FECHA DE ADQUISICION: En proceso
+            else
+                h5 FECHA DE ADQUISICION: #{distri.fechaDeAdquisicion}

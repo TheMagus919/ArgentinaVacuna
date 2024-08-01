@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      DistribucionCentro.belongsTo(models.CentroDeVacunacion, { foreignKey: 'idCentro' });
+      DistribucionCentro.belongsTo(models.CentroDeVacunacion, { foreignKey: 'idCentro' , as: 'DistribucionCentroVac'});
       DistribucionCentro.belongsTo(models.LoteProveedor, { foreignKey: 'nroLote' });
       DistribucionCentro.belongsTo(models.DepositoProvincial, { foreignKey: 'idDepProv' })
     }
@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     fechaDeSalidaDepProv: {
         type: DataTypes.DATEONLY,
-        allowNull: false,
+        allowNull: true,
     },
     idCentro: {
         type: DataTypes.INTEGER,
@@ -47,7 +47,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     fechaLlegadaCentro: {
         type: DataTypes.DATEONLY,
-        allowNull: false,
+        allowNull: true,
+    },
+    descartado: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
     },
   },
   {

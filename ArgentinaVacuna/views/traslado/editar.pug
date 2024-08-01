@@ -28,9 +28,9 @@ block content
                             input.form-control(type="number" name="cantidadDeVacunas" id="cantidadDeVacunas" min="1" max=`${cantidad.cantidadDeVacunas}` value=`${tras.cantidadDeVacunas}` required)
                         .form-group
                             label(for="fechaSalida") FECHA SALIDA:
-                            input.form-control(type="date" name="fechaSalida" id="fechaSalida" value=`${tras.fechaSalida}` required)
+                            input.form-control(type="date" name="fechaSalida" id="fechaSalida" value=`${tras.fechaSalida}` min=`${cantidad.fechaLlegadaCentro}` max=`${cantidad.LoteProveedor.fechaDeVencimiento}` required)
                         .form-group
-                            label(for="echaLlegada") FECHA LLEGADA:
-                            input.form-control(type="date" name="echaLlegada" id="echaLlegada"  value=`${tras.fechaLlegada}` required)
+                            label(for="fechaLlegada") FECHA LLEGADA:
+                            input.form-control(type="date" name="fechaLlegada" id="fechaLlegada" value=`${tras.fechaLlegada}` min=`${cantidad.fechaLlegadaCentro}` max=`${cantidad.LoteProveedor.fechaDeVencimiento}`)
                         .form-group
                             input.form-control.btn.btn-light(type="submit", value="Guardar")

@@ -5,8 +5,8 @@ block content
         a.link(href="./")
             | Volver Atrás
             img(src='/images/volver.png', alt="Flecha hacia atrás")
-    h2 Listado de Lotes.
-    p Selecciona el Lote que sera trasladado al Deposito Nacional.
+    h2 Listado de Lotes Disponibles para comprar.
+    p Selecciona el Lote.
     table.table#tabla
         thead
             tr
@@ -14,14 +14,18 @@ block content
                 th NOMBRE COMERCIAL
                 th TIPO VACUNA
                 th CANTIDAD DE VACUNAS
+                th FECHA DE FABRICACION
+                th FECHA DE VENCIMIENTO
                 th OPCIONES
         tbody
             each lote in listaDeLotes
                 tr
                     td= lote.nroLote
                     td= lote.nombreComercial
-                    td= lote.TipoVacuna.nombre
+                    td= lote.TipoVacuna.nombre 
                     td= lote.cantidadDeVacunas
-                    td 
+                    td= lote.fechaDeFabricacion
+                    td= lote.fechaDeVencimiento
+                    td
                         form(action=`/distribucion/distribucionDepoNac/crear/${lote.nroLote}`, method="get")
                             input.btn.btn-primary(type="submit", value="Seleccionar")

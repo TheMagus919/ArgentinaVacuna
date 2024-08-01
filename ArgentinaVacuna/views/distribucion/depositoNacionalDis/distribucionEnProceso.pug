@@ -1,0 +1,34 @@
+extends ../../layout.pug
+
+block content
+    .contenedorVolverCrear
+        a.link(href="/distribucion/distribucionDepoNac")
+            | Volver Atrás
+            img(src='/images/volver.png', alt="Flecha hacia atrás")
+    h2 COMPRAS EN PROCESO:
+    table.table#tabla
+        thead
+            tr
+                th ID
+                th DEPOSITO NACIONAL
+                th LOTE PROVEEDOR
+                th CANTIDAD VACUNAS
+                th FECHA DE COMPRA
+                th FECHA DE ADQUISICION
+                th OPCIONES
+
+        tbody
+            each dis in ListaDistribucion
+                tr
+                    td= dis.idTrasladoDep
+                    td= dis.DepositoNacional.idDepNac+" - "+dis.DepositoNacional.nombre
+                    td= dis.LoteProveedor.nroLote+" - "+dis.LoteProveedor.nombreComercial
+                    td= dis.cantidadDeVacunas
+                    td= dis.fechaDeCompra
+                    if dis.fechaDeAdquisicion == null 
+                        td= "En Proceso"
+                    td(style="display: flex;")
+                        form(action=`/distribucion/distribucionDepoNac/consultar/${dis.idTrasladoDep}`, method="get")
+                                input.btn.btn-primary(type="submit", value="Consultar")
+                        form(action=`/distribucion/distribucionDepoNac/ingreso/${dis.idTrasladoDep}`, method="get")
+                                input.btn.btn-secondary(type="submit", value="Registrar ingreso")

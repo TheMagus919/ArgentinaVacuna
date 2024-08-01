@@ -6,18 +6,20 @@ block content
             | Volver Atrás
             img(src='/images/volver.png', alt="Flecha hacia atrás")
     h2 Listado de Depositos Provinciales.
-    P Selecciona un Deposito Provincial para poder elegir el lote que sera trasladado al Centro de Vacunacion.
+    P Selecciona un Deposito Provincial para poder elegir el lote que sera distribuido.
     table.table#tabla
         thead
             tr
                 th ID DEPOSITO
                 th NOMBRE
+                th LOCALIDAD
                 th OPCIONES
         tbody
             each dep in listaDeDepositos
                 tr
                     td= dep.DepositoProvincial.idDepProv
                     td= dep.DepositoProvincial.nombre
+                    td= dep.DepositoProvincial.localidad
                     td 
                         form(action=`/distribucion/distribucionCentroVac/depositos/lote/${dep.idDepProv}`, method="get")
                             input.btn.btn-primary(type="submit", value="Seleccionar")

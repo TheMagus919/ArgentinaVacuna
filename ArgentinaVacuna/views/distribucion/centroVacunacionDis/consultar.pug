@@ -8,7 +8,7 @@ block content
     .consulta
         h1 DISTRIBUCION CENTRO DE VACUNACION ID: #{distri.idDisCentro}.
         .contenido
-            h4 DEPOSITO PROVINCIAL QUE ENVIA:
+            h4 DEPOSITO PROVINCIAL:
             ol
                 li ID: #{distri.idDepProv}
                 li NOMBRE: #{distri.DepositoProvincial.nombre}
@@ -26,15 +26,23 @@ block content
                 li LABORATORIO: #{distri.LoteProveedor.Laboratorio.nombre}
                 li FECHA FABRICACION: #{distri.LoteProveedor.fechaDeFabricacion}
                 li FECHA VENCIMIENTO: #{distri.LoteProveedor.fechaDeVencimiento}
+                if distri.LoteProveedor.vencidas
+                    li VENCIDAS: SI
         .contenido
-            h4 CENTRO DE VACUNACION QUE RECIBE: 
+            h4 CENTRO DE VACUNACION: 
             ol
                 li ID: #{distri.idCentro}
-                li NOMBRE: #{distri.CentroDeVacunacion.nombre}
-                li PROVINCIA: #{distri.CentroDeVacunacion.provincia}
-                li LOCALIDAD: #{distri.CentroDeVacunacion.localidad}
-                li DIRECCION: #{distri.CentroDeVacunacion.direccion}
+                li NOMBRE: #{distri.DistribucionCentroVac.nombre}
+                li PROVINCIA: #{distri.DistribucionCentroVac.provincia}
+                li LOCALIDAD: #{distri.DistribucionCentroVac.localidad}
+                li DIRECCION: #{distri.DistribucionCentroVac.direccion}
         .contenido
             h4 CANTIDAD DE VACUNAS QUE SE ENVIAN: #{distri.cantidadDeVacunas}
-            h4 FECHA DE SALIDA: #{distri.fechaDeSalidaDepProv}
-            h4 FECHA DE LLEGADA: #{distri.fechaLlegadaCentro}
+            if distri.fechaDeSalidaDepProv==null 
+                h4 FECHA DE SALIDA: En Proceso
+            else
+                h4 FECHA DE SALIDA: #{distri.fechaDeSalidaDepProv}
+            if distri.fechaLlegadaCentro==null 
+                h4 FECHA DE LLEGADA: En Proceso
+            else
+                h4 FECHA DE LLEGADA: #{distri.fechaLlegadaCentro}

@@ -1,0 +1,27 @@
+extends ../layout.pug
+
+block content
+    .contenedorVolverCrear
+        a.link(href="/loteProveedor/listar")
+            | Volver Atrás
+            img(src='/images/volver.png', alt="Flecha hacia atrás")
+    table.table#tabla
+        thead
+            tr
+                th NOMBRE
+                th ALMACENADAS EN NACION
+                th ALMACENADAS EN PROVINCIA
+                th ALMACENADAS EN CENTRO DE VACUNACION
+                th APLICADAS
+                th DESCARTADAS
+                th VENCIDAS
+        tbody
+            each lote in listaLotes
+                tr
+                    td= lote.nombre
+                    td= lote.almacenadasEnNacion
+                    td= lote.almacenadasEnProvincia
+                    td= lote.almacenadasEnCentro
+                    td= lote.aplicadas
+                    td= lote.descartadas
+                    td= lote.vencidas

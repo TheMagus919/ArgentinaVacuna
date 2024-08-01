@@ -1,50 +1,46 @@
 extends ../layout.pug
 
 block content
-    .contenedorVolverCrear
-        a.link(href="/")
-            | Volver Atrás
-            img(src='/images/volver.png', alt="Flecha hacia atrás")
-        h5
-            form(action=`/loteProveedor/crear`, method="get")
-                input(type="submit", value="Añadir Nuevo Lote Proveedor")
-    a.linkopcion(href="/loteProveedor/listar") Listar Lote Proveedores almacenados en todo el pais
-    a.linkopcion(href="/loteProveedor/listarVacunasVencidas") Cantidad de Vacunas Vencidas
+    if rol == "Administrador"
+        .contenedorVolverCrear
+            a.link(href="/")
+                | Volver Atrás
+                img(src='/images/volver.png', alt="Flecha hacia atrás")
+            h5
+                form(action=`/laboratorio/crear`, method="get")
+                    input(type="submit", value="Añadir Laboratorio")
+    else
+        .contenedorVolverCrear
+            a.link(href="/")
+                | Volver Atrás
+                img(src='/images/volver.png', alt="Flecha hacia atrás")
+            h5
+                form(action=`/loteProveedor/crear`, method="get")
+                    input(type="submit", value="Añadir Nuevo Lote Proveedor")
+        a.linkopcion(href="/loteProveedor/listar") Registro de Lotes Almacenados en todo el Pais
+        a.linkopcion(href="/loteProveedor/listarVacunasVencidas") Vacunas Vencidas
+        a.linkopcion(href="/loteProveedor/lotesSinEnviar") Lotes sin Enviar
+    h4(style="margin:20px;") LISTA DE LOTES PROVEEDORES
     table.table#tabla
         thead
             tr
                 th NUMERO DE LOTE
-                th LABORATORIO
-                th TIPO DE VACUNA
-                th TIPO DE FRASCO
                 th NOMBRE COMERCIAL
+                th TIPO DE VACUNA
                 th CANTIDAD DE VACUNAS
-                th FECHA DE FABRICACION
-                th FECHA DE VENCIMIENTO
-                th FECHA DE COMPRA
-                th VENCIDAS
                 th OPCIONES
         tbody
             each lote in listaDeLotesProveedores
                 tr
                     td= lote.nroLote
-                    td= lote.Laboratorio.nombre
-                    td= lote.TipoVacuna.nombre
-                    td= lote.tipoDeFrasco
                     td= lote.nombreComercial
+                    td= lote.TipoVacuna.nombre
                     td= lote.cantidadDeVacunas
-                    td= lote.fechaDeFabricacion
-                    td= lote.fechaDeVencimiento
-                    td= lote.fechaDeCompra
-                    if lote.vencidas
-                        td="Si"
-                    else
-                        td="No"
                     td(style="display: flex;")
-                        if !lote.vencidas
+                        if rol == "Administrador"
                             form(action=`/loteProveedor/editar/${lote.nroLote}`, method="get")
                                 input.btn.btn-primary(type="submit", value="Editar")
-                            form(action=`/loteProveedor/eliminar/${lote.nroLote}?_method=DELETE`, method="post")
-                                input.btn.btn-danger(type="submit", value="Borrar")
+                            input.btn.btn-danger(type="button" onclick=`eliminarLoteProveedor(${lote.nroLote},this)` value="Eliminar")
                         else 
-                            label no manipulable
+                            form(action=`/loteProveedor/consultar/${lote.nroLote}`, method="get")
+                                input.btn.btn-primary(type="submit", value="Consultar")

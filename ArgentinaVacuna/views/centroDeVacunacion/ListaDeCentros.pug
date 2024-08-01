@@ -1,19 +1,26 @@
 extends ../layout.pug
 
 block content
-    .contenedorVolverCrear
-        a.link(href="/")
-            | Volver Atrás
-            img(src='/images/volver.png', alt="Flecha hacia atrás")
-        h5
-            form(action=`/centroDeVacunacion/crear`, method="get")
-                input(type="submit", value="Añadir Nuevo Centro de Vacunacion")
+    if rol == "Administrador"
+        .contenedorVolverCrear
+            a.link(href="/")
+                | Volver Atrás
+                img(src='/images/volver.png', alt="Flecha hacia atrás")
+            h5
+                form(action=`/centroDeVacunacion/crear`, method="get")
+                    input(type="submit", value="Añadir Centro de Vacunacion")
+        h4(style="margin:20px;") LISTA DE CENTROS DE VACUNACION
+    else 
+        .contenedorVolverCrear
+            a.link(href="/")
+                | Volver Atrás
+                img(src='/images/volver.png', alt="Flecha hacia atrás")
+        h3(style="margin:20px;") Lista de Centros de Vacunacion de la Provincia de #{provincia}:
     table.table#tabla
         thead
             tr
                 th ID
                 th NOMBRE
-                th PROVINCIA
                 th LOCALIDAD
                 th DIRECCION
                 th OPCIONES
@@ -22,11 +29,14 @@ block content
                 tr
                     td= centro.idCentro
                     td= centro.nombre
-                    td= centro.provincia
                     td= centro.localidad
                     td= centro.direccion
                     td(style="display: flex;")
-                        form(action=`/centroDeVacunacion/editar/${centro.idCentro}`, method="get")
-                            input.btn.btn-primary(type="submit", value="Editar")
-                        form(action=`/centroDeVacunacion/eliminar/${centro.idCentro}?_method=DELETE`, method="post")
-                            input.btn.btn-danger(type="submit", value="Borrar")
+                        if rol == "Administrador"
+                            form(action=`/centroDeVacunacion/editar/${centro.idCentro}`, method="get")
+                                input.btn.btn-primary(type="submit", value="Editar")
+                            input.btn.btn-danger(type="button" onclick=`eliminarCentroVac(${centro.idCentro},this)` value="Eliminar")
+                        else 
+                            form(action=`/centroDeVacunacion/stock/${centro.idCentro}`, method="get")
+                                input.btn.btn-success(type="submit", value="Consultar Stock")
+                        
