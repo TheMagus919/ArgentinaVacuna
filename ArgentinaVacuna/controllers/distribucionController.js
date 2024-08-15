@@ -65,7 +65,7 @@ exports.comprasEnProceso = async function (req, res) {
 };
 
 exports.enviosEnProceso = async function (req, res) {
-    DistribucionDeposito.findAll({ include: [{ model: DepositoNacional }, { model: DepositoProvincial }, { model: LoteProveedor }], where: [{ fechaLlegadaDepProv: null }, { fechaDeSalidaDepNac: { [Op.not]: null } }] })
+    DistribucionDeposito.findAll({ include: [{ model: DepositoNacional }, { model: DepositoProvincial }, { model: LoteProveedor }], where: [{ '$DepositoNacional.provincia$': req.session.provincia }, { fechaLlegadaDepProv: null }, { fechaDeSalidaDepNac: { [Op.not]: null } }] })
         .then((result) => {
             res.render("distribucion/depositoNacionalDis/enviosEnProceso", { title: "Envios en Proceso", rol: req.session.rol, name: req.session.nombre, mail: req.session.mail, ListaDistribucion: result });
         })
@@ -73,7 +73,7 @@ exports.enviosEnProceso = async function (req, res) {
 };
 
 exports.listaSolicitudesDepNac = async function (req, res) {
-    DistribucionDeposito.findAll({ include: [{ model: DepositoNacional }, { model: DepositoProvincial }, { model: LoteProveedor }], where: [{ fechaLlegadaDepProv: null }, { fechaDeSalidaDepNac: null }] })
+    DistribucionDeposito.findAll({ include: [{ model: DepositoNacional }, { model: DepositoProvincial }, { model: LoteProveedor }], where: [{ '$DepositoNacional.provincia$': req.session.provincia }, { fechaLlegadaDepProv: null }, { fechaDeSalidaDepNac: null }] })
         .then((result) => {
             res.render("distribucion/depositoNacionalDis/listaSolicitudes", { title: "Solicitudes Pendientes", rol: req.session.rol, name: req.session.nombre, mail: req.session.mail, solicitudes: result });
         })
@@ -130,7 +130,13 @@ exports.crearDistribucionDepoNac = async function (req, res) {
         const depositosNac = await DepositoNacional.findOne({ where: { provincia: req.session.provincia } });
         LoteProveedor.findByPk(req.params.id)
             .then((result) => {
-                res.render("distribucion/depositoNacionalDis/distribuir", { title: "Distribucion Deposito Nacional", rol: req.session.rol, name: req.session.nombre, mail: req.session.mail, deposito: depositosNac, lote: result });
+                let fechaAntes = new Date(result.fechaDeFabricacion);
+                fechaAntes.setDate(fechaAntes.getDate() + 1);
+                let year = fechaAntes.getFullYear();
+                let month = String(fechaAntes.getMonth() + 1).padStart(2, '0');
+                let day = String(fechaAntes.getDate() + 1).padStart(2, '0');
+                let formattedDate = `${year}-${month}-${day}`;
+                res.render("distribucion/depositoNacionalDis/distribuir", { title: "Distribucion Deposito Nacional", rol: req.session.rol, name: req.session.nombre, mail: req.session.mail, deposito: depositosNac, lote: result, fechaAntes: formattedDate });
             })
             .catch((err) => res.render("error", { error: err }));
     } catch (error) {
@@ -599,8 +605,8 @@ exports.listarLotesCentro = async function (req, res) {
 
 exports.crearDistribucionCentroVac = async function (req, res) {
     const centros = await CentroDeVacunacion.findAll({ where: { idCentro: { [Op.in]: req.session.trabaja } } });
-    const dist = await DistribucionDeposito.findOne({ include: [{ model: LoteProveedor }, { model: DepositoProvincial }], where: [{ nroLote: req.params.lote }, { idDepProv: req.params.id }, { '$LoteProveedor.vencidas$': false }, { descartado: false }, { cantidadDeVacunas: { [Op.gt]: 0 } }] })
-    const resultado = await DistribucionDeposito.findAll({ attributes: [[Sequelize.fn('sum', Sequelize.col('DistribucionDeposito.cantidadDeVacunas')), 'cantidadTotalVacunas']], include: { model: LoteProveedor }, where: [{ nroLote: req.params.lote }, { idDepProv: req.params.id }, { descartado: false }, { '$LoteProveedor.vencidas$': false }, { cantidadDeVacunas: { [Op.gt]: 0 } }], raw: true });
+    const dist = await DistribucionDeposito.findOne({ include: [{ model: LoteProveedor }, { model: DepositoProvincial }], where: [{ nroLote: req.params.lote }, { idDepProv: req.params.id }, { '$LoteProveedor.vencidas$': false }, { descartado: false }, { fechaLlegadaDepProv: { [Op.not]: null } }, { cantidadDeVacunas: { [Op.gt]: 0 } }] })
+    const resultado = await DistribucionDeposito.findAll({ attributes: [[Sequelize.fn('sum', Sequelize.col('DistribucionDeposito.cantidadDeVacunas')), 'cantidadTotalVacunas']], include: { model: LoteProveedor }, where: [{ nroLote: req.params.lote }, { idDepProv: req.params.id }, { fechaLlegadaDepProv: { [Op.not]: null } } ,{ descartado: false }, { '$LoteProveedor.vencidas$': false }, { cantidadDeVacunas: { [Op.gt]: 0 } }], raw: true });
     const cantidadTotalVacunas = resultado[0].cantidadTotalVacunas || 0;
     res.render("distribucion/centroVacunacionDis/distribuir", { title: "Distribucion Centro Vacunacion", rol: req.session.rol, name: req.session.nombre, mail: req.session.mail, centros: centros, distri: dist, cantidad: cantidadTotalVacunas });
 };
@@ -618,7 +624,7 @@ exports.altaDistribucionCentroVac = async function (req, res) {
     const partesC = textoCentro.split('-');
     var cen = partesC[0].trim();
 
-    const resultado = await DistribucionDeposito.findAll({ attributes: [[Sequelize.fn('sum', Sequelize.col('DistribucionDeposito.cantidadDeVacunas')), 'cantidadTotalVacunas']], include: { model: LoteProveedor }, where: [{ nroLote: lote }, { idDepProv: depo }, { descartado: false }, { '$LoteProveedor.vencidas$': false }, { cantidadDeVacunas: { [Op.gt]: 0 } }], raw: true });
+    const resultado = await DistribucionDeposito.findAll({ attributes: [[Sequelize.fn('sum', Sequelize.col('DistribucionDeposito.cantidadDeVacunas')), 'cantidadTotalVacunas']], include: { model: LoteProveedor }, where: [{ nroLote: lote }, { idDepProv: depo }, { descartado: false }, { '$LoteProveedor.vencidas$': false }, { cantidadDeVacunas: { [Op.gt]: 0 } }, { fechaLlegadaDepProv: { [Op.not]: null } }], raw: true });
     const cantidadTotalVacunas = resultado[0].cantidadTotalVacunas || 0;
     try {
         if (req.body.idDepProv != null || req.body.idDepProv != "" && req.body.nroLote != null || req.body.nroLote != "" && req.body.cantidadDeVacunas != null || req.body.cantidadDeVacunas != "" && req.body.idCentro != null || req.body.idCentro != "") {
@@ -629,7 +635,7 @@ exports.altaDistribucionCentroVac = async function (req, res) {
                     .then(async (result) => {
                         let cantidadRestante = parseInt(req.body.cantidadDeVacunas);
 
-                        const distribuciones = await DistribucionDeposito.findAll({ include: { model: LoteProveedor }, where: [{ nroLote: lote }, { idDepProv: depo }, { descartado: false }, { '$LoteProveedor.vencidas$': false }, { cantidadDeVacunas: { [Op.gt]: 0 } }], order: [['fechaLlegadaDepProv', 'ASC']] });
+                        const distribuciones = await DistribucionDeposito.findAll({ include: { model: LoteProveedor }, where: [{ nroLote: lote }, { idDepProv: depo }, { descartado: false }, { '$LoteProveedor.vencidas$': false }, { fechaLlegadaDepProv: { [Op.not]: null } }, { cantidadDeVacunas: { [Op.gt]: 0 } }], order: [['fechaLlegadaDepProv', 'ASC']] });
                         for (let distribucion of distribuciones) {
                             if (cantidadRestante <= 0) break;
 

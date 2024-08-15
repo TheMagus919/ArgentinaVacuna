@@ -20,7 +20,7 @@ block content
                     .col-md-4
                         .form-group
                             label(for="fechaDeCompra") FECHA DE COMPRA:
-                            input.form-control(type="date" name="fechaDeCompra" id="fechaDeCompra" min=`${lote.fechaDeFabricacion}` max=`${lote.fechaDeVencimiento}` required)
+                            input.form-control(type="date" name="fechaDeCompra" id="fechaDeCompra" min=`${fechaAntes}` max=`${lote.fechaDeVencimiento}` required)
                         .form-group
                             label(for="")
                             input.form-control.btn.btn-light(type="submit", value="Guardar")

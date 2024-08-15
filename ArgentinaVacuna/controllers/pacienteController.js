@@ -71,7 +71,9 @@ exports.alta = async function (req, res) {
         const fechaActual = moment().format('L');
         if (req.body.dniPaciente != "" || req.body.dniPaciente != null && req.body.nombre != "" || req.body.nombre != null && req.body.apellido != "" || req.body.apellido != null && req.body.fechaDeNacimiento != "" || req.body.fechaDeNacimiento != null && req.body.genero != "" || req.body.genero != null && req.body.mail != "" || req.body.mail != null && req.body.localidad != "" || req.body.localidad != null && req.body.celular != "" || req.body.celular != null && req.body.celularDeRespaldo != "" || req.body.celularDeRespaldo != null) {
             const fecha = moment(req.body.fechaDeNacimiento).format('L');
-            if (fecha >= fechaActual) {
+            const fechaN = new Date(fecha);
+            const ActualA = new Date(fechaActual);
+            if (fechaN >= ActualA) {
                 res.render("error", { message: "Bad Request", error: { status: 400, stack: "Fecha de Nacimiento invalida." } });
             } else if (req.body.genero == "masculino" || req.body.genero == "femenino") {
                 const MailExistente = await Paciente.findOne({ where: { mail: req.body.mail } });

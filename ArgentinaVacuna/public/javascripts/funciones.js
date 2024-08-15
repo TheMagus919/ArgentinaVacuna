@@ -408,7 +408,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
       document.getElementById('pais').value = "";
 
-    } else {
+    } else if(rol === "Deposito Nacional"){
+      document.getElementById('provGroup').removeAttribute("hidden");
+      document.getElementById('trabaja').setAttribute("hidden", true);
+      campoProvincia.setAttribute("required", true);
+      campoProvincia2.setAttribute("hidden", true);
+      campoProvincia.removeAttribute("hidden");
+      campoProvincia.removeAttribute("disabled");
+      campoProvincia2.setAttribute("disabled", true);
+      campoProvincia2.removeAttribute("required");
+
+      document.getElementById('pais').value = "";
+    }else {
       document.getElementById('provGroup').setAttribute("hidden", true);
       document.getElementById('trabaja').setAttribute("hidden", true);
       campoProvincia.setAttribute("hidden", true);

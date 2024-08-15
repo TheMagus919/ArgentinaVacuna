@@ -44,8 +44,7 @@ exports.obtener = async function (req, res) {
             listaLote.add(traslado[i].nroLote);
         }
         const lotesArray = Array.from(listaLote);
-
-        if (listaLote == null || listaLote.length === 0) {
+        if (lotesArray != null || lotesArray.length != 0) {
             LoteProveedor.findAll({ where: { nroLote: { [Op.in]: lotesArray } } })
                 .then((result) => {
                     res.render("aplicacion/registrarAplicacion", { title: "Aplicacion", rol: req.session.rol, name: req.session.nombre, mail: req.session.mail, agente: agentes, listPacientes: pacientes, listaLote: result, centro: centroNombre });

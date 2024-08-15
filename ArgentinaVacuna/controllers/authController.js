@@ -1,4 +1,4 @@
-const { AgenteDeSalud, CentroDeVacunacion, DepositoProvincial, Trabaja, Laboratorio} = require("../models");
+const { AgenteDeSalud, CentroDeVacunacion, DepositoProvincial, DepositoNacional, Trabaja, Laboratorio} = require("../models");
 const sequelize = require('sequelize');
 const bcrypt = require("bcrypt");
 const moment = require("moment");
@@ -174,6 +174,12 @@ exports.trabajo = async function (req, res) {
         Laboratorio.findAll({where:[{provincia:provincia},{pais:pais}]})
         .then((laboratorios)=>{
             res.json({ laboratorios });; 
+        })
+        .catch((err) => res.render("error", { error: err }));
+    }else if(rol=="Deposito Nacional"){
+        DepositoNacional.findAll({where:[{provincia:provincia}]})
+        .then((depositos)=>{
+            res.json({ depositos });; 
         })
         .catch((err) => res.render("error", { error: err }));
     }
